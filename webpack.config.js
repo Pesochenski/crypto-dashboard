@@ -1,6 +1,7 @@
 const path = require("path")
 const HTMLWebpackPlugin = require("html-webpack-plugin")
 const { CleanWebpackPlugin } = require("clean-webpack-plugin")
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
   mode: "development",
@@ -15,6 +16,7 @@ module.exports = {
   plugins: [
     new HTMLWebpackPlugin({ template: "./public/index.html" }),
     new CleanWebpackPlugin(),
+    new ESLintPlugin(options),
   ],
   resolve: {
     extensions: ['.tsx', '.ts', '.jsx', '.js'],
