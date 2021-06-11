@@ -9,12 +9,10 @@
         "google",
         "prettier",
         "plugin:prettier/recommended",
-        "plugin:@typescript-eslint/recommended",
         "plugin:import/recommended",
         "plugin:import/errors",
         "plugin:import/warnings"
     ],
-    "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaFeatures": {
             "jsx": true
@@ -24,12 +22,13 @@
     },
     "plugins": [
         "react",
-        "@typescript-eslint",
         "prettier",
         "import"
     ],
     "rules": {
       "require-jsdoc": 0,
-      "import/no-unresolved": 1
+      "import/no-unresolved": 0,
+      "semi": 1,
+      "no-unused-vars": 1
     }
 }
