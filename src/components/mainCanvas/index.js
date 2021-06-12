@@ -33,7 +33,7 @@ export default function MainCanvas() {
     [0, 0],
     [200, 200],
     [400, 100],
-    [600, 400],
+    [600, 300],
     [800, 300],
   ];
 
@@ -49,6 +49,7 @@ export default function MainCanvas() {
   const ROWS_COUNT = 5;
   const step = VEIW_HEIGHT / ROWS_COUNT;
   const textStep = (max - min) / ROWS_COUNT;
+  const yRatio = VEIW_HEIGHT / (max - min);
 
   function charting(canvas, data) {
     const ctx = canvas.getContext("2d");
@@ -81,7 +82,7 @@ export default function MainCanvas() {
     ctx.lineWidth = 2;
     ctx.strokeStyle = "blue";
     for (const [x, y] of data) {
-      ctx.lineTo(x, DPI_HEIGHT - PADDING - y);
+      ctx.lineTo(x, DPI_HEIGHT - PADDING - y * yRatio);
     }
     ctx.stroke();
     ctx.closePath();
