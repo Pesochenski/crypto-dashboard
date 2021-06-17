@@ -1,6 +1,6 @@
-// import axios from "axios";
 import React from "react";
 import MainCanvas from "./components/mainCanvas";
+import "./app.scss";
 
 export default function App() {
   return (

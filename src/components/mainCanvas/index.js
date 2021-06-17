@@ -8,21 +8,45 @@ export default function MainCanvas() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    charting(document.getElementById("main-canvas"), data);
-  }, [min, data]);
+    const interval = setInterval(() => {
+      gettingTestData();
+    }, 60 * 1000);
+    return () => clearInterval(interval);
+  }, [data]);
   useEffect(() => {
     gettingTestData();
   }, []);
+
+  useEffect(() => {
+    charting(document.getElementById("main-canvas"), data);
+  }, [min, data]);
   useEffect(() => {
     checkForMinAndMax(data);
   }, [data]);
 
+  const WIDTH = 600;
+  const HEIGHT = 200;
+  const PADDING = 40;
+
+  const DPI_WIDTH = WIDTH * 2;
+  const DPI_HEIGHT = HEIGHT * 2;
+
+  const VEIW_HEIGHT = DPI_HEIGHT - PADDING * 2;
+  const VEIW_WIDTH = DPI_WIDTH;
+
+  const ROWS_COUNT = 5;
+  const step = VEIW_HEIGHT / ROWS_COUNT;
+  const textStep = (max - min) / ROWS_COUNT;
+
+  const yRatio = VEIW_HEIGHT / (max - min);
+  const xRatio = VEIW_WIDTH / (data.length - 2);
+
   async function gettingTestData() {
     const res = await axios.get(
-      "https://api.binance.com/api/v1/klines?symbol=BTCUSDT&interval=5m&limit=10"
+      "https://api.binance.com/api/v1/klines?symbol=BTCUSDT&interval=5m&limit=20"
     );
-    // console.log(res.data);
 
+    // console.log(res.data);
     // res.data.forEach((item) => {
     //   console.log(new Date(item[6]));
     // });
@@ -52,23 +76,6 @@ export default function MainCanvas() {
     setMin(Math.round(Ydata[0]));
     setMax(Math.round(Ydata[Ydata.length - 1]));
   }
-
-  const WIDTH = 600;
-  const HEIGHT = 200;
-  const PADDING = 40;
-
-  const DPI_WIDTH = WIDTH * 2;
-  const DPI_HEIGHT = HEIGHT * 2;
-
-  const VEIW_HEIGHT = DPI_HEIGHT - PADDING * 2;
-  const VEIW_WIDTH = DPI_WIDTH;
-
-  const ROWS_COUNT = 5;
-  const step = VEIW_HEIGHT / ROWS_COUNT;
-  const textStep = (max - min) / ROWS_COUNT;
-
-  const yRatio = VEIW_HEIGHT / (max - min);
-  const xRatio = VEIW_WIDTH / data.length;
 
   function charting(canvas, data) {
     const ctx = canvas.getContext("2d");
@@ -103,18 +110,18 @@ export default function MainCanvas() {
     for (const [x, y] of data) {
       ctx.lineTo(
         Math.floor(x * xRatio),
-        Math.floor(Math.floor(DPI_HEIGHT - PADDING - y * yRatio))
+        Math.floor((y - min) * yRatio) + PADDING
       );
-      console.log(
-        Math.floor(DPI_HEIGHT - PADDING - y * yRatio),
-        max - min,
-        min,
-        max
-      );
+      // console.log(Math.floor((y - min) * yRatio) + PADDING);
     }
     ctx.stroke();
     ctx.closePath();
   }
 
-  return <canvas id="main-canvas" className="main-canvas" />;
+  return (
+    <>
+      <h2>BTC to USD</h2>
+      <canvas id="main-canvas" className="main-canvas" />
+    </>
+  );
 }
