@@ -1,9 +1,34 @@
 import React, { useEffect, useState } from "react";
 import "./canvas.scss";
+import axios from "axios";
 
 export default function MainCanvas() {
   const [min, setMin] = useState();
   const [max, setMax] = useState();
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    charting(document.getElementById("main-canvas"), data);
+  }, [min, data]);
+  useEffect(() => {
+    gettingTestData();
+  }, []);
+  useEffect(() => {
+    checkForMinAndMax(data);
+  }, [data]);
+
+  async function gettingTestData() {
+    const res = await axios.get(
+      "https://api.binance.com/api/v1/klines?symbol=BTCUSDT&interval=5m&limit=10"
+    );
+    // console.log(res.data);
+
+    // res.data.forEach((item) => {
+    //   console.log(new Date(item[6]));
+    // });
+
+    setData(res.data.map((item, i) => [i, item[4]]));
+  }
 
   function checkForMinAndMax(data) {
     const Ydata = [];
@@ -24,18 +49,9 @@ export default function MainCanvas() {
       }
     }
 
-    setMin(Ydata[0]);
-    setMax(Ydata[Ydata.length - 1]);
-    // return [Ydata[0], Ydata[Ydata.length - 1]];
+    setMin(Math.round(Ydata[0]));
+    setMax(Math.round(Ydata[Ydata.length - 1]));
   }
-
-  const data = [
-    [0, 0],
-    [200, 200],
-    [400, 100],
-    [600, 300],
-    [800, 300],
-  ];
 
   const WIDTH = 600;
   const HEIGHT = 200;
@@ -45,11 +61,14 @@ export default function MainCanvas() {
   const DPI_HEIGHT = HEIGHT * 2;
 
   const VEIW_HEIGHT = DPI_HEIGHT - PADDING * 2;
+  const VEIW_WIDTH = DPI_WIDTH;
 
   const ROWS_COUNT = 5;
   const step = VEIW_HEIGHT / ROWS_COUNT;
   const textStep = (max - min) / ROWS_COUNT;
+
   const yRatio = VEIW_HEIGHT / (max - min);
+  const xRatio = VEIW_WIDTH / data.length;
 
   function charting(canvas, data) {
     const ctx = canvas.getContext("2d");
@@ -71,7 +90,7 @@ export default function MainCanvas() {
     for (let i = 1; i <= ROWS_COUNT; i++) {
       const y = step * i;
       const text = max - textStep * i;
-      ctx.fillText(text, 5, y + PADDING - 10);
+      ctx.fillText(text.toFixed(0), 5, y + PADDING - 10);
       ctx.moveTo(0, y + PADDING);
       ctx.lineTo(DPI_WIDTH, y + PADDING);
     }
@@ -82,19 +101,20 @@ export default function MainCanvas() {
     ctx.lineWidth = 2;
     ctx.strokeStyle = "blue";
     for (const [x, y] of data) {
-      ctx.lineTo(x, DPI_HEIGHT - PADDING - y * yRatio);
+      ctx.lineTo(
+        Math.floor(x * xRatio),
+        Math.floor(Math.floor(DPI_HEIGHT - PADDING - y * yRatio))
+      );
+      console.log(
+        Math.floor(DPI_HEIGHT - PADDING - y * yRatio),
+        max - min,
+        min,
+        max
+      );
     }
     ctx.stroke();
     ctx.closePath();
   }
-
-  useEffect(() => {
-    checkForMinAndMax(data);
-  }, []);
-
-  useEffect(() => {
-    charting(document.getElementById("main-canvas"), data);
-  }, [min]);
 
   return <canvas id="main-canvas" className="main-canvas" />;
 }
