@@ -10,7 +10,7 @@ export default function MainCanvas() {
   useEffect(() => {
     const interval = setInterval(() => {
       gettingTestData();
-    }, 60 * 1000);
+    }, 60 * 60 * 1000);
     return () => clearInterval(interval);
   }, [data]);
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function MainCanvas() {
 
   async function gettingTestData() {
     const res = await axios.get(
-      "https://api.binance.com/api/v1/klines?symbol=BTCUSDT&interval=5m&limit=20"
+      "https://api.binance.com/api/v1/klines?symbol=BTCUSDT&interval=1d&limit=24"
     );
 
     // console.log(res.data);
