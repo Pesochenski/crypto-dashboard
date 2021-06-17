@@ -5,7 +5,7 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
   mode: "development",
-  entry: ["./src/index.tsx", "@babel/polyfill"],
+  entry: ["./src/index.js", "@babel/polyfill"],
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "[name].[hash].js",
@@ -16,18 +16,13 @@ module.exports = {
   plugins: [
     new HTMLWebpackPlugin({ template: "./public/index.html" }),
     new CleanWebpackPlugin(),
-    new ESLintPlugin(options),
+    new ESLintPlugin(),
   ],
   resolve: {
-    extensions: ['.tsx', '.ts', '.jsx', '.js'],
+    extensions: ['.jsx', '.js'],
   },
   module: {
     rules: [
-      {
-        test: /\.ts$|tsx/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
-      },
       {
         test: /\.(css|scss)$/,
         use: ["style-loader", "css-loader", "sass-loader"]
@@ -42,7 +37,7 @@ module.exports = {
       },
       {
         loader: 'babel-loader',
-        test: /\.ts$|tsx/,
+        test: /\.js$|jsx/,
         exclude: /node_modules/
       }
     ]
