@@ -25,7 +25,7 @@ export default function MainCanvas() {
   }, [data]);
 
   const WIDTH = 600;
-  const HEIGHT = 200;
+  const HEIGHT = 250;
   const PADDING = 40;
 
   const DPI_WIDTH = WIDTH * 2;
@@ -100,6 +100,7 @@ export default function MainCanvas() {
       ctx.fillText(text.toFixed(0), 5, y + PADDING - 10);
       ctx.moveTo(0, y + PADDING);
       ctx.lineTo(DPI_WIDTH, y + PADDING);
+      // ctx.setLineDash([5]);
     }
     ctx.stroke();
     ctx.closePath();
