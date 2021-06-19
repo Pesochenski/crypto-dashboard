@@ -111,7 +111,7 @@ export default function MainCanvas() {
     for (const [x, y] of data) {
       ctx.lineTo(
         Math.floor(x * xRatio),
-        Math.floor((y - min) * yRatio) + PADDING
+        VEIW_HEIGHT - Math.floor((y - min) * yRatio) + PADDING
       );
       // console.log(Math.floor((y - min) * yRatio) + PADDING);
     }
