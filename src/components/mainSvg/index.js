@@ -4,22 +4,26 @@ import axios from "axios";
 
 export default function SvgChart() {
   const [stroke, setStroke] = useState(null);
-  const [xArr, setXArr] = useState([
-    // 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
-  ]);
-  const [yArr, setYArr] = useState([
-    // 0, 20000, 30000, 20000, 25000, 40000, 15000, 20400, 19000, 8000,
-  ]);
+  const [xArr, setXArr] = useState([]);
+  const [yArr, setYArr] = useState([]);
   const [firstX, setFirstX] = useState(0);
   const [firstY, setFirstY] = useState(0);
   const [minY, setMinY] = useState(0);
   const [maxY, setMaxY] = useState(0);
+  const [yLines, setYLines] = useState([]);
 
   const HEIGHT = 300;
   const WIDTH = 700;
+  const Y_PADDING = 50;
+  const X_PADDING = 50;
 
-  const xRatio = Math.round(WIDTH / (xArr.length - 2));
-  const yRatio = HEIGHT / (maxY - minY);
+  const LINE_COUNT = 4;
+
+  const VIEW_HEIGHT = HEIGHT - Y_PADDING * 2;
+  const VIEW_WIDTH = WIDTH - X_PADDING * 2;
+
+  const xRatio = Math.round(VIEW_WIDTH / (xArr.length - 2));
+  const yRatio = VIEW_HEIGHT / (maxY - minY);
 
   useEffect(() => {
     const svgInterval = setInterval(() => {
@@ -34,12 +38,12 @@ export default function SvgChart() {
     sorting();
   }, [yArr, xArr]);
   useEffect(() => {
-    testing();
+    drawing();
   }, [maxY, minY]);
 
   async function fetchData() {
     const res = await axios.get(
-      "https://api.binance.com/api/v1/klines?symbol=BTCUSDT&interval=1d&limit=24"
+      "https://api.binance.com/api/v1/klines?symbol=BTCUSDT&interval=1d&limit=120"
     );
 
     setXArr(res.data.map((item, i) => i));
@@ -68,19 +72,28 @@ export default function SvgChart() {
     setMaxY(Math.round(yData[yData.length - 1]));
   }
 
-  function testing() {
+  function drawing() {
     let final = "L ";
+    const lines = [];
+    let Y_LINE = VIEW_HEIGHT + Y_PADDING;
 
     for (let i = 1; i < yArr.length; i++) {
       final +=
-        String(Math.round(xArr[i]) * xRatio) + // Math.round(xArr[i] * xRatio)
+        String(Math.round(xArr[i]) * xRatio + X_PADDING) +
         " " +
-        String(HEIGHT - Math.round((yArr[i] - minY) * yRatio)) +
+        String(HEIGHT - Math.round((yArr[i] - minY) * yRatio) - Y_PADDING) +
         " ";
     }
 
-    console.log(xRatio);
-    console.log(final);
+    for (let i = 0; i < LINE_COUNT; i++) {
+      Y_LINE = Y_LINE - Y_PADDING;
+      lines.push(Y_LINE);
+    }
+
+    console.log(lines);
+    // console.log(xRatio);
+    // console.log(final);
+    setYLines(lines);
     setStroke(final);
     setFirstY(HEIGHT - Math.round((yArr[0] - minY) * yRatio));
   }
@@ -88,13 +101,41 @@ export default function SvgChart() {
   return (
     <div className="svg-chart">
       <svg className="svg-chart__svg">
-        {stroke ? (
-          <path
-            d={`M ${firstX} ${Math.round(firstY)} ${stroke}`}
-            className="svg-chart__path"
+        <g>
+          {yLines
+            ? yLines.map((item) => (
+                <line
+                  key={item}
+                  x1={String(X_PADDING)}
+                  y1={String(item)}
+                  x2={String(WIDTH - X_PADDING)}
+                  y2={String(item)}
+                  stroke="gray"
+                  strokeDasharray="2 4"
+                />
+              ))
+            : null}
+
+          <line
+            x1={String(X_PADDING)}
+            y1={String(HEIGHT - Y_PADDING)}
+            x2={String(WIDTH - X_PADDING)}
+            y2={String(HEIGHT - Y_PADDING)}
+            stroke="black"
           />
-        ) : null}
-        ;
+        </g>
+
+        <g>
+          {stroke ? (
+            <path
+              d={`M ${firstX + X_PADDING} ${
+                Math.round(firstY) - Y_PADDING
+              } ${stroke}`}
+              className="svg-chart__path"
+            />
+          ) : null}
+          ;
+        </g>
       </svg>
     </div>
   );
