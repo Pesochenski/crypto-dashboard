@@ -1,17 +1,22 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap");
 
-.svg-chart {
-  margin-top: 30px;
-  // border: 1px solid rgb(0, 0, 0);
-  border-radius: 25px;
-  background-color: #98e3f021;
-  transition: 0.3s;
-
+.main {
+  display: flex;
+  flex-direction: column;
   width: 700px;
-  height: 300px;
 
-  &:hover {
-    background-color: #98e3f046;
+  &__svg-chart {
+    border-radius: 25px;
+    background-color: #98e3f021;
+    transition: 0.3s;
+    // margin-top: 30px;
+
+    width: 700px;
+    height: 300px;
+
+    &:hover {
+      background-color: #98e3f046;
+    }
   }
 
   &__svg {
@@ -45,5 +50,43 @@
     letter-spacing: 0.05em;
     fill: #1282a2;
     opacity: 0.9;
+  }
+
+  &__btns {
+    margin-left: auto;
+    margin-bottom: 15px;
+  }
+  &__btn {
+    width: 50px;
+    height: 25px;
+    border-radius: 8px;
+    margin-left: 10px;
+    background-color: #98e3f021;
+    transition: 0.3s;
+    color: #13708a;
+
+    outline: none;
+    border: none;
+
+    font: {
+      family: "Montserrat";
+      size: 12px;
+      weight: 500;
+    }
+    letter-spacing: 0.05em;
+
+    &:first-child {
+      margin-left: 0;
+    }
+    &:hover {
+      background-color: #98e3f046;
+    }
+  }
+
+  &__active-btn {
+    @extend .main__btn;
+
+    background-color: #309cb9;
+    color: white;
   }
 }

@@ -15,6 +15,9 @@ export default function SvgChart() {
   const [xLines, setXLines] = useState([]);
   const [area, setArea] = useState("");
 
+  const [btn, setBtn] = useState(["1h", "1d", "7d", "1m"]);
+  const [activeBtn, setActiveBtn] = useState(2);
+
   const HEIGHT = 300;
   const WIDTH = 700;
   const Y_PADDING = 40;
@@ -145,15 +148,30 @@ export default function SvgChart() {
   }
 
   return (
-    <>
+    <div className="main">
       <h2>BTC to USD</h2>
-      <div className="svg-chart">
-        <svg className="svg-chart__svg">
+
+      <div className="main__btns">
+        {btn.map((item, i) => (
+          <button
+            className={
+              activeBtn == i + 1 ? "main__btn main__active-btn" : "main__btn"
+            }
+            key={i}
+            onClick={() => setActiveBtn(i + 1)}
+          >
+            {item}
+          </button>
+        ))}
+      </div>
+
+      <div className="main__svg-chart">
+        <svg className="main__svg">
           <path
             d={`M ${firstX + X_PADDING} ${
               Math.round(firstY) - Y_PADDING
             } ${area}`}
-            className="svg-chart__area"
+            className="main__area"
           />
 
           {xLines.map((item) => (
@@ -161,7 +179,7 @@ export default function SvgChart() {
               <text
                 x={item.line - 10}
                 y={HEIGHT - Y_PADDING / 2.5}
-                className="svg-chart__text"
+                className="main__text"
               >
                 {item.text}
               </text>
@@ -170,7 +188,7 @@ export default function SvgChart() {
                 y1={HEIGHT - Y_PADDING}
                 x2={item.line}
                 y2={Y_PADDING / 2}
-                className="svg-chart__backline"
+                className="main__backline"
               />
             </g>
           ))}
@@ -182,7 +200,7 @@ export default function SvgChart() {
                     <text
                       x={String(X_PADDING / 4)}
                       y={String(item.line + 4)}
-                      className="svg-chart__text"
+                      className="main__text"
                     >
                       {item.text}
                     </text>
@@ -191,7 +209,7 @@ export default function SvgChart() {
                       y1={String(item.line)}
                       x2={String(WIDTH - X_PADDING / 2)}
                       y2={String(item.line)}
-                      className="svg-chart__backline"
+                      className="main__backline"
                     />
                   </g>
                 ))
@@ -202,7 +220,7 @@ export default function SvgChart() {
               y1={String(HEIGHT - Y_PADDING)}
               x2={String(WIDTH - X_PADDING / 2)}
               y2={String(HEIGHT - Y_PADDING)}
-              className="svg-chart__under"
+              className="main__under"
             />
           </g>
 
@@ -211,11 +229,11 @@ export default function SvgChart() {
               d={`M ${firstX + X_PADDING} ${
                 Math.round(firstY) - Y_PADDING
               } ${stroke}`}
-              className="svg-chart__path"
+              className="main__path"
             />
           ) : null}
         </svg>
       </div>
-    </>
+    </div>
   );
 }
