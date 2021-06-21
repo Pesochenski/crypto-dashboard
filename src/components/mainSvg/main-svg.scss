@@ -2,11 +2,17 @@
 
 .svg-chart {
   margin-top: 30px;
-  border: 1px solid rgb(0, 0, 0);
-  border-radius: 18px;
+  // border: 1px solid rgb(0, 0, 0);
+  border-radius: 25px;
+  background-color: #98e3f021;
+  transition: 0.3s;
 
   width: 700px;
   height: 300px;
+
+  &:hover {
+    background-color: #98e3f046;
+  }
 
   &__svg {
     width: 100%;
@@ -14,22 +20,30 @@
   }
 
   &__backline {
-    stroke: gray;
+    stroke: #1282a2;
     stroke-dasharray: 2 4;
+    opacity: 0.6;
   }
 
   &__path {
     fill: none;
-    stroke: black;
+    stroke: #309cb9;
     stroke-width: 2;
   }
   &__area {
-    fill: rgba(0, 128, 0, 0.2);
+    fill: #caf0f8;
+    opacity: 0.8;
+  }
+
+  &__under {
+    stroke: #2c7da0;
   }
 
   &__text {
     font-family: "Montserrat";
     font-size: 12px;
     letter-spacing: 0.05em;
+    fill: #1282a2;
+    opacity: 0.9;
   }
 }

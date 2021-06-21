@@ -141,80 +141,81 @@ export default function SvgChart() {
       redacted.push(sorted[i]);
     }
 
-    // console.log(sorted);
-    // console.log(redacted);
     redacted ? setTime(redacted) : null;
   }
 
   return (
-    <div className="svg-chart">
-      <svg className="svg-chart__svg">
-        <path
-          d={`M ${firstX + X_PADDING} ${
-            Math.round(firstY) - Y_PADDING
-          } ${area}`}
-          className="svg-chart__area"
-        />
-
-        {xLines.map((item) => (
-          <g key={item.line}>
-            <text
-              x={item.line - 10}
-              y={HEIGHT - Y_PADDING / 2.5}
-              className="svg-chart__text"
-            >
-              {item.text}
-            </text>
-            <line
-              x1={item.line}
-              y1={HEIGHT - Y_PADDING}
-              x2={item.line}
-              y2={Y_PADDING / 2}
-              className="svg-chart__backline"
-            />
-          </g>
-        ))}
-
-        <g>
-          {yLines
-            ? yLines.map((item) => (
-                <g key={item.line}>
-                  <text
-                    x={String(X_PADDING / 4)}
-                    y={String(item.line + 4)}
-                    className="svg-chart__text"
-                  >
-                    {item.text}
-                  </text>
-                  <line
-                    x1={String(X_PADDING)}
-                    y1={String(item.line)}
-                    x2={String(WIDTH - X_PADDING / 2)}
-                    y2={String(item.line)}
-                    className="svg-chart__backline"
-                  />
-                </g>
-              ))
-            : null}
-
-          <line
-            x1={String(X_PADDING)}
-            y1={String(HEIGHT - Y_PADDING)}
-            x2={String(WIDTH - X_PADDING / 2)}
-            y2={String(HEIGHT - Y_PADDING)}
-            stroke="black"
-          />
-        </g>
-
-        {stroke ? (
+    <>
+      <h2>BTC to USD</h2>
+      <div className="svg-chart">
+        <svg className="svg-chart__svg">
           <path
             d={`M ${firstX + X_PADDING} ${
               Math.round(firstY) - Y_PADDING
-            } ${stroke}`}
-            className="svg-chart__path"
+            } ${area}`}
+            className="svg-chart__area"
           />
-        ) : null}
-      </svg>
-    </div>
+
+          {xLines.map((item) => (
+            <g key={item.line}>
+              <text
+                x={item.line - 10}
+                y={HEIGHT - Y_PADDING / 2.5}
+                className="svg-chart__text"
+              >
+                {item.text}
+              </text>
+              <line
+                x1={item.line}
+                y1={HEIGHT - Y_PADDING}
+                x2={item.line}
+                y2={Y_PADDING / 2}
+                className="svg-chart__backline"
+              />
+            </g>
+          ))}
+
+          <g>
+            {yLines
+              ? yLines.map((item) => (
+                  <g key={item.line}>
+                    <text
+                      x={String(X_PADDING / 4)}
+                      y={String(item.line + 4)}
+                      className="svg-chart__text"
+                    >
+                      {item.text}
+                    </text>
+                    <line
+                      x1={String(X_PADDING)}
+                      y1={String(item.line)}
+                      x2={String(WIDTH - X_PADDING / 2)}
+                      y2={String(item.line)}
+                      className="svg-chart__backline"
+                    />
+                  </g>
+                ))
+              : null}
+
+            <line
+              x1={String(X_PADDING)}
+              y1={String(HEIGHT - Y_PADDING)}
+              x2={String(WIDTH - X_PADDING / 2)}
+              y2={String(HEIGHT - Y_PADDING)}
+              className="svg-chart__under"
+            />
+          </g>
+
+          {stroke ? (
+            <path
+              d={`M ${firstX + X_PADDING} ${
+                Math.round(firstY) - Y_PADDING
+              } ${stroke}`}
+              className="svg-chart__path"
+            />
+          ) : null}
+        </svg>
+      </div>
+    </>
   );
 }

@@ -67,10 +67,10 @@ export default function MainCanvas() {
         if (Ydata[j] < Ydata[minIndex]) {
           minIndex = j;
         }
-        const stock = Ydata[i];
-        Ydata[i] = Ydata[minIndex];
-        Ydata[minIndex] = stock;
       }
+      const stock = Ydata[i];
+      Ydata[i] = Ydata[minIndex];
+      Ydata[minIndex] = stock;
     }
 
     setMin(Math.round(Ydata[0]));
