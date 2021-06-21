@@ -43,7 +43,7 @@ export default function MainCanvas() {
 
   async function gettingTestData() {
     const res = await axios.get(
-      "https://api.binance.com/api/v1/klines?symbol=BTCUSDT&interval=1d&limit=120"
+      "https://api.binance.com/api/v1/klines?symbol=BTCUSDT&interval=15m&limit=96"
     );
 
     // console.log(res.data);
