@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./canvas.scss";
+import "./main-canvas.scss";
 import axios from "axios";
 
 export default function MainCanvas() {

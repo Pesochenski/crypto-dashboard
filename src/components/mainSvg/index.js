@@ -2,11 +2,15 @@ import React, { useState, useEffect } from "react";
 import "./main-svg.scss";
 import axios from "axios";
 
+import { useDispatch } from "react-redux";
+import { getMainCreator } from "../../store/reducers/getMainReducer";
+import { useSelector } from "react-redux";
+
 export default function SvgChart() {
   const [stroke, setStroke] = useState(null);
-  const [xArr, setXArr] = useState([]);
-  const [yArr, setYArr] = useState([]);
-  const [time, setTime] = useState([]);
+  // const [xArr, setXArr] = useState([]);
+  // const [yArr, setYArr] = useState([]);
+  const [hours, setHours] = useState([]);
   const [firstX, setFirstX] = useState(0);
   const [firstY, setFirstY] = useState(0);
   const [minY, setMinY] = useState(0);
@@ -17,6 +21,9 @@ export default function SvgChart() {
 
   const [btn, setBtn] = useState(["1h", "1d", "7d", "1m"]);
   const [activeBtn, setActiveBtn] = useState(2);
+
+  const dispatch = useDispatch();
+  const { xArr, yArr, time } = useSelector((state) => state.getMain);
 
   const HEIGHT = 300;
   const WIDTH = 700;
@@ -38,12 +45,19 @@ export default function SvgChart() {
 
   useEffect(() => {
     const svgInterval = setInterval(() => {
-      fetchData();
+      // fetchData();
     }, 60 * 60 * 1000);
     return () => clearInterval(svgInterval);
   }, [xArr]);
   useEffect(() => {
-    fetchData();
+    // fetchData();
+    dispatch(getMainCreator());
+
+    console.log(xArr, yArr, time);
+
+    // sorting();
+    // drawing();
+    // sortHours();
   }, []);
   useEffect(() => {
     sorting();
@@ -55,15 +69,15 @@ export default function SvgChart() {
     sortHours();
   }, [stroke]);
 
-  async function fetchData() {
-    const res = await axios.get(
-      "https://api.binance.com/api/v1/klines?symbol=BTCUSDT&interval=15m&limit=96"
-    );
+  // async function fetchData() {
+  //   const res = await axios.get(
+  //     "https://api.binance.com/api/v1/klines?symbol=BTCUSDT&interval=15m&limit=96"
+  //   );
 
-    setXArr(res.data.map((item, i) => i));
-    setYArr(res.data.map((item) => Number(item[4])));
-    setTime(res.data.map((item) => new Date(item[6])));
-  }
+  //   setXArr(res.data.map((item, i) => i));
+  //   setYArr(res.data.map((item) => Number(item[4])));
+  //   setTime(res.data.map((item) => new Date(item[6])));
+  // }
 
   function sorting() {
     const yData = [];
@@ -110,7 +124,7 @@ export default function SvgChart() {
 
     for (let i = 0; i < X_LINE_COUNT + 1; i++) {
       const X_LINE = X_STEP * i;
-      OXlines.push({ line: X_LINE + X_PADDING, text: String(time[i] + "h.") });
+      OXlines.push({ line: X_LINE + X_PADDING, text: String(hours[i] + "h.") });
     }
 
     const finalArea =
@@ -144,7 +158,7 @@ export default function SvgChart() {
       redacted.push(sorted[i]);
     }
 
-    redacted ? setTime(redacted) : null;
+    redacted ? setHours(redacted) : null;
   }
 
   return (
@@ -158,7 +172,7 @@ export default function SvgChart() {
               activeBtn == i + 1 ? "main__btn main__active-btn" : "main__btn"
             }
             key={i}
-            onClick={() => setActiveBtn(i + 1)}
+            onClick={() => setActiveBtn(i + 1)} // add dispatch after redux working
           >
             {item}
           </button>
