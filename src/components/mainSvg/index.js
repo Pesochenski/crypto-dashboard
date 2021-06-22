@@ -2,14 +2,11 @@ import React, { useState, useEffect } from "react";
 import "./main-svg.scss";
 import axios from "axios";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getMainCreator } from "../../store/reducers/getMainReducer";
-import { useSelector } from "react-redux";
 
 export default function SvgChart() {
   const [stroke, setStroke] = useState(null);
-  // const [xArr, setXArr] = useState([]);
-  // const [yArr, setYArr] = useState([]);
   const [hours, setHours] = useState([]);
   const [firstX, setFirstX] = useState(0);
   const [firstY, setFirstY] = useState(0);
@@ -23,7 +20,9 @@ export default function SvgChart() {
   const [activeBtn, setActiveBtn] = useState(2);
 
   const dispatch = useDispatch();
-  const { xArr, yArr, time } = useSelector((state) => state.getMain);
+  const { loaded, error, xArr, yArr, time } = useSelector(
+    (state) => state.getMain
+  );
 
   const HEIGHT = 300;
   const WIDTH = 700;
@@ -45,39 +44,23 @@ export default function SvgChart() {
 
   useEffect(() => {
     const svgInterval = setInterval(() => {
-      // fetchData();
+      dispatch(getMainCreator());
     }, 60 * 60 * 1000);
     return () => clearInterval(svgInterval);
   }, [xArr]);
   useEffect(() => {
-    // fetchData();
     dispatch(getMainCreator());
-
-    console.log(xArr, yArr, time);
-
-    // sorting();
-    // drawing();
-    // sortHours();
   }, []);
   useEffect(() => {
     sorting();
   }, [yArr, xArr]);
   useEffect(() => {
     drawing();
+    sortHours();
   }, [maxY, minY, time]);
   useEffect(() => {
     sortHours();
   }, [stroke]);
-
-  // async function fetchData() {
-  //   const res = await axios.get(
-  //     "https://api.binance.com/api/v1/klines?symbol=BTCUSDT&interval=15m&limit=96"
-  //   );
-
-  //   setXArr(res.data.map((item, i) => i));
-  //   setYArr(res.data.map((item) => Number(item[4])));
-  //   setTime(res.data.map((item) => new Date(item[6])));
-  // }
 
   function sorting() {
     const yData = [];

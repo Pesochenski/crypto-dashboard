@@ -1,6 +1,6 @@
 import "regenerator-runtime/runtime";
 import { put, takeEvery, call } from "redux-saga/effects";
-import getMain from "../http/getMain";
+import { getMain } from "../http/getMain";
 import {
   getMainErrorCreator,
   getMainSuccessCreator,
@@ -11,11 +11,16 @@ function* getMainWorker() {
   try {
     const res = yield call(getMain);
 
-    const payload = {
-      xArr: res.data.map((item, i) => i),
-      yArr: res.data.map((item) => Number(item[4])),
-      time: res.data.map((item) => new Date(item[6])),
-    };
+    const payload = yield call(
+      () =>
+        new Promise((resolve) =>
+          resolve({
+            xArr: res.data.map((item, i) => i),
+            yArr: res.data.map((item) => Number(item[4])),
+            time: res.data.map((item) => new Date(item[6])),
+          })
+        )
+    );
 
     yield put(getMainSuccessCreator(payload));
   } catch (e) {
