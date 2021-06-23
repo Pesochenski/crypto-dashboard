@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./main-svg.scss";
-import axios from "axios";
-
 import { useDispatch, useSelector } from "react-redux";
-import { getMainCreator } from "../../store/reducers/getMainReducer";
+import { getMainCreator } from "../../store/reducers/queryReducers/getMainReducer";
+import { sortHoursCreator } from "../../store/reducers/sortReducers/sortTimeReducer";
 
 export default function SvgChart() {
   const [stroke, setStroke] = useState(null);
-  const [hours, setHours] = useState([]);
+  // const [hours, setHours] = useState([]);
   const [firstX, setFirstX] = useState(0);
   const [firstY, setFirstY] = useState(0);
   const [minY, setMinY] = useState(0);
@@ -23,6 +22,7 @@ export default function SvgChart() {
   const { loaded, error, xArr, yArr, time } = useSelector(
     (state) => state.getMain
   );
+  const { sortedTime } = useSelector((state) => state.sortTime);
 
   const HEIGHT = 300;
   const WIDTH = 700;
@@ -56,11 +56,9 @@ export default function SvgChart() {
   }, [yArr, xArr]);
   useEffect(() => {
     drawing();
-    sortHours();
+    // sortHours();
+    dispatch(sortHoursCreator(time));
   }, [maxY, minY, time]);
-  useEffect(() => {
-    sortHours();
-  }, [stroke]);
 
   function sorting() {
     const yData = [];
@@ -107,8 +105,13 @@ export default function SvgChart() {
 
     for (let i = 0; i < X_LINE_COUNT + 1; i++) {
       const X_LINE = X_STEP * i;
-      OXlines.push({ line: X_LINE + X_PADDING, text: String(hours[i] + "h.") });
+      OXlines.push({
+        line: X_LINE + X_PADDING,
+        text: String(sortedTime[i] + "h."),
+      });
     }
+
+    console.log(sortedTime);
 
     const finalArea =
       final +
@@ -128,25 +131,27 @@ export default function SvgChart() {
     setFirstY(HEIGHT - Math.round((yArr[0] - minY) * yRatio));
   }
 
-  function sortHours() {
-    let sorted = [];
-    const redacted = [];
+  // function sortHours() {
+  //   let sorted = [];
+  //   const redacted = [];
 
-    for (let i = 0; i < time.length; i++) {
-      sorted.push(time[i].getHours());
-    }
-    sorted = sorted.filter((item, i) => sorted.indexOf(item) == i);
+  //   for (let i = 0; i < time.length; i++) {
+  //     sorted.push(time[i].getHours());
+  //   }
+  //   sorted = sorted.filter((item, i) => sorted.indexOf(item) == i);
 
-    for (let i = 0; i < sorted.length; i += 4) {
-      redacted.push(sorted[i]);
-    }
+  //   for (let i = 0; i < sorted.length; i += 4) {
+  //     redacted.push(sorted[i]);
+  //   }
 
-    redacted ? setHours(redacted) : null;
-  }
+  //   redacted ? setHours(redacted) : null;
+  // }
 
   return (
     <div className="main">
       <h2>BTC to USD</h2>
+
+      {!loaded ? <p>loading...</p> : null}
 
       <div className="main__btns">
         {btn.map((item, i) => (

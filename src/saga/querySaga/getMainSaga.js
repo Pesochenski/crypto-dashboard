@@ -1,11 +1,11 @@
 import "regenerator-runtime/runtime";
 import { put, takeEvery, call } from "redux-saga/effects";
-import { getMain } from "../http/getMain";
+import { getMain } from "../../http/getMain";
 import {
   getMainErrorCreator,
   getMainSuccessCreator,
   GET_MAIN,
-} from "../store/reducers/getMainReducer";
+} from "../../store/reducers/queryReducers/getMainReducer";
 
 function* getMainWorker() {
   try {

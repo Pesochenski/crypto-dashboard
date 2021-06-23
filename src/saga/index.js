@@ -1,6 +1,7 @@
 import { all } from "redux-saga/effects";
-import { getMainWatcher } from "./getMainSaga";
+import { getMainWatcher } from "./querySaga/getMainSaga";
+import { sortWatcher } from "./sortSaga/sortSaga";
 
 export function* rootWatcher() {
-  yield all([getMainWatcher()]);
+  yield all([getMainWatcher(), sortWatcher()]);
 }
