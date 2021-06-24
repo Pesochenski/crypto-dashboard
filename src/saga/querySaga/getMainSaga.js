@@ -7,9 +7,13 @@ import {
   GET_MAIN,
 } from "../../store/reducers/queryReducers/getMainReducer";
 
-function* getMainWorker() {
+function* getMainWorker(action) {
   try {
-    const res = yield call(getMain);
+    const res = yield call(
+      getMain,
+      action.payload.interval,
+      action.payload.limit
+    );
 
     const payload = yield call(
       () =>

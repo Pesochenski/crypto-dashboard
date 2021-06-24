@@ -2,18 +2,12 @@ const initialSortedTimeState = {
   sortedTime: [],
 };
 
-export const SORT_MINUTES = "SORT_MINUTES";
-export const SORT_HOURS = "SORT_HOURS";
-export const SORT_DAYS = "SORT_DAYS";
+export const SORT_TIME = "SORT_TIME";
 export const SORT_TIME_SUCCESS = "SORT_TIME_SUCCESS";
 
 export function sortTimeReducer(state = initialSortedTimeState, action) {
   switch (action.type) {
-    case SORT_MINUTES:
-      return { sortedTime: [] };
-    case SORT_HOURS:
-      return { sortedTime: [] };
-    case SORT_DAYS:
+    case SORT_TIME:
       return { sortedTime: [] };
     case SORT_TIME_SUCCESS:
       return { sortedTime: action.payload };
@@ -22,15 +16,10 @@ export function sortTimeReducer(state = initialSortedTimeState, action) {
   }
 }
 
-export const sortMinutesCreator = (array) => ({
-  type: SORT_MINUTES,
-  payload: array,
+export const sortTimeCreator = (array, type) => ({
+  type: SORT_TIME,
+  payload: { array: array, type: type },
 });
-export const sortHoursCreator = (array) => ({
-  type: SORT_HOURS,
-  payload: array,
-});
-export const sortDaysCreator = (array) => ({ type: SORT_DAYS, payload: array });
 export const sortTimeSuccessCreator = (payload) => ({
   type: SORT_TIME_SUCCESS,
   payload: payload,

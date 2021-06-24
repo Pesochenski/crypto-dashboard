@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import "./main-svg.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { getMainCreator } from "../../store/reducers/queryReducers/getMainReducer";
-import { sortHoursCreator } from "../../store/reducers/sortReducers/sortTimeReducer";
+import { sortTimeCreator } from "../../store/reducers/sortReducers/sortTimeReducer";
 
 export default function SvgChart() {
   const [stroke, setStroke] = useState(null);
-  // const [hours, setHours] = useState([]);
   const [firstX, setFirstX] = useState(0);
   const [firstY, setFirstY] = useState(0);
   const [minY, setMinY] = useState(0);
@@ -15,8 +14,43 @@ export default function SvgChart() {
   const [xLines, setXLines] = useState([]);
   const [area, setArea] = useState("");
 
-  const [btn, setBtn] = useState(["1h", "1d", "7d", "1m"]);
-  const [activeBtn, setActiveBtn] = useState(2);
+  const [btn, setBtn] = useState([
+    {
+      btnName: "1h",
+      query: {
+        interval: "1m",
+        limit: "60",
+      },
+      interval: 60 * 1000,
+    },
+    {
+      btnName: "1d",
+      query: {
+        interval: "15m",
+        limit: "96",
+      },
+      interval: 60 * 60 * 1000,
+    },
+    {
+      btnName: "7d",
+      query: {
+        interval: "2h",
+        limit: "84",
+      },
+      interval: 24 * 60 * 60 * 1000,
+    },
+    {
+      btnName: "1m",
+      query: {
+        interval: "",
+        limit: "",
+      },
+      interval: 60 * 60 * 1000, // ???
+    },
+  ]);
+  const [activeBtn, setActiveBtn] = useState([
+    { activeNum: 1, activeName: "1h", activeInterval: btn[0].interval },
+  ]);
 
   const dispatch = useDispatch();
   const { loaded, error, xArr, yArr, time } = useSelector(
@@ -44,24 +78,24 @@ export default function SvgChart() {
 
   useEffect(() => {
     const svgInterval = setInterval(() => {
-      dispatch(getMainCreator());
+      dispatch(getMainCreator(btn[0].query.interval, btn[0].query.limit));
     }, 60 * 60 * 1000);
     return () => clearInterval(svgInterval);
   }, [xArr]);
   useEffect(() => {
-    dispatch(getMainCreator());
+    dispatch(getMainCreator(btn[0].query.interval, btn[0].query.limit));
   }, []);
   useEffect(() => {
     sorting();
   }, [yArr, xArr]);
   useEffect(() => {
     drawing();
-    // sortHours();
-    dispatch(sortHoursCreator(time));
+    dispatch(sortTimeCreator(time, activeBtn.activeName));
   }, [maxY, minY, time]);
 
   function sorting() {
     const yData = [];
+
     for (const y of yArr) {
       yData.push(Math.round(y));
     }
@@ -84,7 +118,7 @@ export default function SvgChart() {
 
   function drawing() {
     let final = "L ";
-    const lines = [];
+    const OYlines = [];
     const OXlines = [];
 
     for (let i = 1; i < yArr.length; i++) {
@@ -97,7 +131,7 @@ export default function SvgChart() {
 
     for (let i = 0; i < Y_LINE_COUNT; i++) {
       const Y_LINE = Y_STEP * i;
-      lines.push({
+      OYlines.push({
         line: Y_LINE + Y_PADDING,
         text: String(Math.round(maxY - TEXT_STEP * i)),
       });
@@ -107,11 +141,9 @@ export default function SvgChart() {
       const X_LINE = X_STEP * i;
       OXlines.push({
         line: X_LINE + X_PADDING,
-        text: String(sortedTime[i] + "h."),
+        text: sortedTime[i],
       });
     }
-
-    console.log(sortedTime);
 
     const finalArea =
       final +
@@ -126,43 +158,37 @@ export default function SvgChart() {
 
     setXLines(OXlines);
     setArea(finalArea);
-    setYLines(lines);
+    setYLines(OYlines);
     setStroke(final);
     setFirstY(HEIGHT - Math.round((yArr[0] - minY) * yRatio));
   }
-
-  // function sortHours() {
-  //   let sorted = [];
-  //   const redacted = [];
-
-  //   for (let i = 0; i < time.length; i++) {
-  //     sorted.push(time[i].getHours());
-  //   }
-  //   sorted = sorted.filter((item, i) => sorted.indexOf(item) == i);
-
-  //   for (let i = 0; i < sorted.length; i += 4) {
-  //     redacted.push(sorted[i]);
-  //   }
-
-  //   redacted ? setHours(redacted) : null;
-  // }
 
   return (
     <div className="main">
       <h2>BTC to USD</h2>
 
       {!loaded ? <p>loading...</p> : null}
+      {error ? <p>Connection error</p> : null}
 
       <div className="main__btns">
         {btn.map((item, i) => (
           <button
             className={
-              activeBtn == i + 1 ? "main__btn main__active-btn" : "main__btn"
+              activeBtn.activeNum == i + 1
+                ? "main__btn main__active-btn"
+                : "main__btn"
             }
             key={i}
-            onClick={() => setActiveBtn(i + 1)} // add dispatch after redux working
+            onClick={() => {
+              setActiveBtn({
+                activeNum: i + 1,
+                activeName: item.btnName,
+                activeInterval: item.interval,
+              });
+              dispatch(getMainCreator(item.query.interval, item.query.limit));
+            }}
           >
-            {item}
+            {item.btnName}
           </button>
         ))}
       </div>
