@@ -29,6 +29,7 @@
       "require-jsdoc": 0,
       "import/no-unresolved": 0,
       "semi": 1,
-      "no-unused-vars": 1
+      "no-unused-vars": 1,
+      "react/prop-types": 0
     }
 }

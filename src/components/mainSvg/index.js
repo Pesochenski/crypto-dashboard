@@ -3,6 +3,7 @@ import "./main-svg.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { getMainCreator } from "../../store/reducers/queryReducers/getMainReducer";
 import { sortTimeCreator } from "../../store/reducers/sortReducers/sortTimeReducer";
+import MainChartBtns from "./mainBtns";
 
 export default function SvgChart() {
   const [stroke, setStroke] = useState(null);
@@ -197,31 +198,11 @@ export default function SvgChart() {
 
       {error ? <p>Connection error</p> : null}
 
-      <div className="main__btns">
-        {btn.map((item, i) => (
-          <button
-            className={
-              activeBtn.activeNum == i + 1
-                ? "main__btn main__active-btn"
-                : "main__btn"
-            }
-            key={i}
-            onClick={() => {
-              setActiveBtn({
-                activeNum: i + 1,
-                activeName: item.btnName,
-                activeLineCount: item.lineCount,
-                activeTextPadding: item.textPadding,
-                activeInterval: item.query.interval,
-                activeLimit: item.query.limit,
-              });
-              dispatch(getMainCreator(item.query.interval, item.query.limit));
-            }}
-          >
-            {item.btnName}
-          </button>
-        ))}
-      </div>
+      <MainChartBtns
+        btn={btn}
+        activeBtn={activeBtn}
+        setActiveBtn={setActiveBtn}
+      />
 
       <div className="main__svg-chart">
         {!loaded ? (
