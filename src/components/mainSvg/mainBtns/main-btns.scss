@@ -32,7 +32,7 @@
   }
 
   &__active-btn {
-    @extend .main__btn;
+    @extend .btns__btn;
 
     background-color: #309cb9;
     color: white;

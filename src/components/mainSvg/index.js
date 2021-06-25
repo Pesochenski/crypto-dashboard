@@ -28,7 +28,7 @@ export default function SvgChart() {
     {
       btnName: "7d",
       query: {
-        interval: "2h",
+        interval: "2h", // 1h 168 investing.com
         limit: "84",
       },
       lineCount: 7,
@@ -37,8 +37,8 @@ export default function SvgChart() {
     {
       btnName: "1m",
       query: {
-        interval: "8h",
-        limit: "90",
+        interval: "4h",
+        limit: "180",
       },
       lineCount: 1,
       textPadding: 30,
@@ -56,7 +56,7 @@ export default function SvgChart() {
       btnName: "1y",
       query: {
         interval: "1d",
-        limit: "366",
+        limit: "365",
       },
       lineCount: 1,
       textPadding: -10,
