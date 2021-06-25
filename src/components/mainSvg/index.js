@@ -18,10 +18,9 @@ export default function SvgChart() {
     {
       btnName: "1d",
       query: {
-        interval: "15m",
-        limit: "96",
+        interval: "5m",
+        limit: "288",
       },
-      interval: 60 * 60 * 1000,
       lineCount: 6,
       textPadding: -10,
     },
@@ -31,37 +30,33 @@ export default function SvgChart() {
         interval: "2h",
         limit: "84",
       },
-      interval: 24 * 60 * 60 * 1000,
       lineCount: 7,
       textPadding: -55,
     },
     {
       btnName: "1m",
       query: {
-        interval: "",
-        limit: "",
+        interval: "8h",
+        limit: "90",
       },
-      interval: 60 * 60 * 1000, // ???
       lineCount: 1,
       textPadding: 30,
     },
     {
       btnName: "3m",
       query: {
-        interval: "",
-        limit: "",
+        interval: "6h",
+        limit: "360",
       },
-      interval: 60 * 60 * 1000, // ???
       lineCount: 1,
       textPadding: -10,
     },
     {
       btnName: "1y",
       query: {
-        interval: "",
-        limit: "",
+        interval: "1d",
+        limit: "366",
       },
-      interval: 60 * 60 * 1000, // ???
       lineCount: 1,
       textPadding: -10,
     },
@@ -70,9 +65,10 @@ export default function SvgChart() {
     {
       activeNum: 1,
       activeName: btn[0].btnName,
-      activeInterval: btn[0].interval,
       activeLineCount: btn[0].lineCount,
       activeTextPadding: btn[0].textPadding,
+      activeInterval: btn[0].query.interval,
+      activeLimit: btn[0].query.limit,
     },
   ]);
 
@@ -91,7 +87,7 @@ export default function SvgChart() {
   const X_LINE_COUNT = activeBtn.activeLineCount;
 
   const VIEW_HEIGHT = HEIGHT - Y_PADDING * 2;
-  const VIEW_WIDTH = WIDTH - X_PADDING * 2 + X_PADDING / 2;
+  const VIEW_WIDTH = WIDTH - X_PADDING * 2; // + X_PADDING / 2
 
   const xRatio = Math.round(VIEW_WIDTH / (xArr.length - 2));
   const yRatio = VIEW_HEIGHT / (maxY - minY);
@@ -101,8 +97,8 @@ export default function SvgChart() {
 
   useEffect(() => {
     const svgInterval = setInterval(() => {
-      dispatch(getMainCreator(btn[0].query.interval, btn[0].query.limit));
-    }, 60 * 60 * 1000);
+      dispatch(getMainCreator(activeBtn.activeInterval, activeBtn.activeLimit));
+    }, 60 * 1000);
     return () => clearInterval(svgInterval);
   }, [xArr]);
   useEffect(() => {
@@ -112,8 +108,8 @@ export default function SvgChart() {
     sorting();
   }, [yArr, xArr]);
   useEffect(() => {
-    drawing();
     dispatch(sortTimeCreator(time, activeBtn.activeName));
+    drawing();
   }, [maxY, minY, time]);
 
   function sorting() {
@@ -183,6 +179,13 @@ export default function SvgChart() {
       xDoneStep.push(xAllStep[i]);
       doneTimeForX.push(allTimeForX[i]);
     }
+    if (activeBtn.activeName == "7d") {
+      if (X_PADDING > xAllStep[0] + btn[1].textPadding) {
+        const excess = xDoneStep.shift();
+        xDoneStep.unshift(xAllStep[0] + VIEW_WIDTH + X_PADDING / 2);
+        console.log(xDoneStep);
+      }
+    }
     for (let i = 0; i < Y_LINE_COUNT; i++) {
       const Y_LINE = Y_STEP * i;
       OYlines.push({
@@ -241,9 +244,10 @@ export default function SvgChart() {
               setActiveBtn({
                 activeNum: i + 1,
                 activeName: item.btnName,
-                activeInterval: item.interval,
                 activeLineCount: item.lineCount,
                 activeTextPadding: item.textPadding,
+                activeInterval: item.query.interval,
+                activeLimit: item.query.limit,
               });
               dispatch(getMainCreator(item.query.interval, item.query.limit));
             }}
@@ -265,24 +269,26 @@ export default function SvgChart() {
               className="main__area"
             />
 
-            {xLines.map((item) => (
-              <g key={item.line}>
-                <text
-                  x={item.line + activeBtn.activeTextPadding}
-                  y={HEIGHT - Y_PADDING / 2.5}
-                  className="main__text"
-                >
-                  {item.text}
-                </text>
-                <line
-                  x1={item.line}
-                  y1={HEIGHT - Y_PADDING}
-                  x2={item.line}
-                  y2={Y_PADDING / 2}
-                  className="main__backline"
-                />
-              </g>
-            ))}
+            {xLines
+              ? xLines.map((item) => (
+                  <g key={item.line}>
+                    <text
+                      x={item.line + activeBtn.activeTextPadding}
+                      y={HEIGHT - Y_PADDING / 2.5}
+                      className="main__text"
+                    >
+                      {item.text}
+                    </text>
+                    <line
+                      x1={item.line}
+                      y1={HEIGHT - Y_PADDING}
+                      x2={item.line}
+                      y2={Y_PADDING / 2}
+                      className="main__backline"
+                    />
+                  </g>
+                ))
+              : null}
 
             <g>
               {yLines
