@@ -5,54 +5,63 @@ import {
   sortTimeSuccessCreator,
 } from "../../store/reducers/sortReducers/sortTimeReducer";
 
-const weekDays = ["Sun.", "Mon.", "Tue.", "Wed.", "Thu.", "Fri.", "Sat."];
+// const weekDays = ["Sun.", "Mon.", "Tue.", "Wed.", "Thu.", "Fri.", "Sat."];
 
 function* sortTimeWorker(action) {
-  const sorted = [];
-  const output = [];
-  let redacted = [];
+  const time = action.payload.array;
+  const xArr = action.payload.arrayX;
   const typeForCheck = action.payload.type;
-  let iterStep = 10;
-  const iter = 0; // let
 
-  for (let i = 0; i < action.payload.array.length; i++) {
-    if (typeForCheck == "1d") {
-      sorted.push(action.payload.array[i].getHours());
-    } else if (typeForCheck == "7d") {
-      sorted.push(action.payload.array[i].getDay());
+  const WIDTH = 700;
+  const X_PADDING = 80;
+  const VIEW_WIDTH = WIDTH - X_PADDING * 2;
+  const xRatio = Math.round(VIEW_WIDTH / (xArr.length - 2));
+
+  const xAllStep = [];
+  const timeForX = [];
+  const allTimeForX = [];
+  let xIterStep = 4;
+
+  const outputLines = []; // xDoneStep
+  const outputX = []; // xDoneTextStep
+  const outputTime = []; // time
+
+  for (let i = 0; i < time.length; i++) {
+    typeForCheck == "1d"
+      ? timeForX.push(time[i].getHours())
+      : typeForCheck == "7d"
+      ? timeForX.push(time[i].getDay())
+      : null;
+  }
+  for (let i = 0; i < xArr.length; i++) {
+    if (timeForX[i] !== timeForX[i + 1]) {
+      // xArr[i + 1] ?
+      xAllStep.push(xArr[i + 1] * xRatio + X_PADDING);
+      // : xAllStep.push(xArr[i] * xRatio + X_PADDING);
+      typeForCheck == "1d"
+        ? allTimeForX.push(timeForX[i + 1])
+        : typeForCheck == "7d"
+        ? allTimeForX.push(timeForX[i])
+        : null;
     }
   }
 
-  typeForCheck == "7d"
-    ? (redacted = sorted.filter((item, i) => sorted.indexOf(item) == i)) // reverse for hours
-    : (redacted = sorted
-        .reverse()
-        .filter((item, i) => sorted.indexOf(item) == i)
-        .reverse());
-
-  if (redacted.length == 24) {
-    iterStep = 4;
-    // iter = 1;
-  } else if (redacted.length == 7) {
-    iterStep = 1;
-    // iter = 1;
+  typeForCheck == "7d" ? (xIterStep = 1) : null;
+  for (let i = 0; i < xAllStep.length; i += xIterStep) {
+    outputLines.push(xAllStep[i]);
+    outputX.push(xAllStep[i]);
+    outputTime.push(allTimeForX[i]);
   }
-
-  for (let i = iter; i < redacted.length; i += iterStep) {
-    if (typeForCheck == "1d") {
-      output.push(String(redacted[i] + "h."));
-    } else if (typeForCheck == "7d") {
-      output.push(String(weekDays[redacted[i]]));
+  if (typeForCheck == "7d") {
+    if (X_PADDING > xAllStep[0] - 55) {
+      const excess = outputX.shift();
+      // console.log(X_PADDING > xAllStep[0] - 55);
+      outputX.unshift(xAllStep[0] + VIEW_WIDTH + X_PADDING / 2);
     }
   }
+  console.log(outputLines);
 
-  // typeForCheck == "1d"
-  //   ? output.push(String(redacted[redacted.length - 1] + "h.")) // String(redacted[redacted.length - 1] + "h.")
-  //   : typeForCheck == "7d"
-  //   ? output.push("") // String(weekDays[redacted[0]])
-  //   : null;
-
-  yield put(sortTimeSuccessCreator(output));
+  yield put(sortTimeSuccessCreator({ outputTime, outputX, outputLines }));
 }
 
 // function* sortMonthWorker(action) {

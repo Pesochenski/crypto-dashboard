@@ -45,8 +45,8 @@ export default function SvgChart() {
     {
       btnName: "3m",
       query: {
-        interval: "6h",
-        limit: "360",
+        interval: "8h",
+        limit: "270",
       },
       lineCount: 1,
       textPadding: -10,
@@ -76,7 +76,9 @@ export default function SvgChart() {
   const { loaded, error, xArr, yArr, time } = useSelector(
     (state) => state.getMain
   );
-  const { sortedTime } = useSelector((state) => state.sortTime);
+  const { sortedTime, sortedX, sortedLines } = useSelector(
+    (state) => state.sortTime
+  );
 
   const HEIGHT = 300;
   const WIDTH = 700;
@@ -108,7 +110,7 @@ export default function SvgChart() {
     sorting();
   }, [yArr, xArr]);
   useEffect(() => {
-    dispatch(sortTimeCreator(time, activeBtn.activeName));
+    dispatch(sortTimeCreator(time, xArr, activeBtn.activeName));
     drawing();
   }, [maxY, minY, time]);
 
@@ -139,13 +141,6 @@ export default function SvgChart() {
     let final = "L ";
     const OYlines = [];
     const OXlines = [];
-
-    const xAllStep = [];
-    const xDoneStep = [];
-    const timeForX = [];
-    const allTimeForX = [];
-    const doneTimeForX = [];
-    let xIterStep = 4;
     const weekDays = ["Sun.", "Mon.", "Tue.", "Wed.", "Thu.", "Fri.", "Sat."];
 
     for (let i = 1; i < xArr.length; i++) {
@@ -156,36 +151,6 @@ export default function SvgChart() {
         " ";
     }
 
-    for (let i = 0; i < time.length; i++) {
-      activeBtn.activeName == "1d"
-        ? timeForX.push(time[i].getHours())
-        : activeBtn.activeName == "7d"
-        ? timeForX.push(time[i].getDay())
-        : null;
-    }
-    for (let i = 0; i < xArr.length; i++) {
-      if (timeForX[i] !== timeForX[i + 1]) {
-        xAllStep.push(xArr[i + 1] * xRatio + X_PADDING);
-        activeBtn.activeName == "1d"
-          ? allTimeForX.push(timeForX[i + 1])
-          : activeBtn.activeName == "7d"
-          ? allTimeForX.push(timeForX[i])
-          : null;
-      }
-    }
-
-    activeBtn.activeName == "7d" ? (xIterStep = 1) : null;
-    for (let i = 0; i < xAllStep.length; i += xIterStep) {
-      xDoneStep.push(xAllStep[i]);
-      doneTimeForX.push(allTimeForX[i]);
-    }
-    if (activeBtn.activeName == "7d") {
-      if (X_PADDING > xAllStep[0] + btn[1].textPadding) {
-        const excess = xDoneStep.shift();
-        xDoneStep.unshift(xAllStep[0] + VIEW_WIDTH + X_PADDING / 2);
-        console.log(xDoneStep);
-      }
-    }
     for (let i = 0; i < Y_LINE_COUNT; i++) {
       const Y_LINE = Y_STEP * i;
       OYlines.push({
@@ -196,13 +161,14 @@ export default function SvgChart() {
     for (let i = 0; i < X_LINE_COUNT; i++) {
       activeBtn.activeName == "1d"
         ? OXlines.push({
-            line: xDoneStep[i],
-            text: doneTimeForX[i] + "h.",
+            line: sortedLines[i],
+            text: sortedTime[i] + "h.",
           })
         : activeBtn.activeName == "7d"
         ? OXlines.push({
-            line: xDoneStep[i],
-            text: weekDays[doneTimeForX[i]],
+            line: sortedLines[i],
+            text: weekDays[sortedTime[i]],
+            textStep: sortedX[i],
           })
         : null;
     }
@@ -288,8 +254,26 @@ export default function SvgChart() {
                     />
                   </g>
                 ))
+              : xLines && activeBtn.activeName == "7d"
+              ? xLines.map((item) => (
+                  <g key={item.line}>
+                    <text
+                      x={item.textStep + activeBtn.activeTextPadding}
+                      y={HEIGHT - Y_PADDING / 2.5}
+                      className="main__text"
+                    >
+                      {item.text}
+                    </text>
+                    <line
+                      x1={item.line}
+                      y1={HEIGHT - Y_PADDING}
+                      x2={item.line}
+                      y2={Y_PADDING / 2}
+                      className="main__backline"
+                    />
+                  </g>
+                ))
               : null}
-
             <g>
               {yLines
                 ? yLines.map((item) => (
