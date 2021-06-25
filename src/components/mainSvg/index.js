@@ -16,20 +16,14 @@ export default function SvgChart() {
 
   const [btn, setBtn] = useState([
     {
-      btnName: "1h",
-      query: {
-        interval: "1m",
-        limit: "60",
-      },
-      interval: 60 * 1000,
-    },
-    {
       btnName: "1d",
       query: {
         interval: "15m",
         limit: "96",
       },
       interval: 60 * 60 * 1000,
+      lineCount: 6,
+      textPadding: -10,
     },
     {
       btnName: "7d",
@@ -38,6 +32,8 @@ export default function SvgChart() {
         limit: "84",
       },
       interval: 24 * 60 * 60 * 1000,
+      lineCount: 7,
+      textPadding: -55,
     },
     {
       btnName: "1m",
@@ -46,10 +42,38 @@ export default function SvgChart() {
         limit: "",
       },
       interval: 60 * 60 * 1000, // ???
+      lineCount: 1,
+      textPadding: 30,
+    },
+    {
+      btnName: "3m",
+      query: {
+        interval: "",
+        limit: "",
+      },
+      interval: 60 * 60 * 1000, // ???
+      lineCount: 1,
+      textPadding: -10,
+    },
+    {
+      btnName: "1y",
+      query: {
+        interval: "",
+        limit: "",
+      },
+      interval: 60 * 60 * 1000, // ???
+      lineCount: 1,
+      textPadding: -10,
     },
   ]);
   const [activeBtn, setActiveBtn] = useState([
-    { activeNum: 1, activeName: "1h", activeInterval: btn[0].interval },
+    {
+      activeNum: 1,
+      activeName: btn[0].btnName,
+      activeInterval: btn[0].interval,
+      activeLineCount: btn[0].lineCount,
+      activeTextPadding: btn[0].textPadding,
+    },
   ]);
 
   const dispatch = useDispatch();
@@ -64,16 +88,15 @@ export default function SvgChart() {
   const X_PADDING = 80;
 
   const Y_LINE_COUNT = 4;
-  const X_LINE_COUNT = 5;
+  const X_LINE_COUNT = activeBtn.activeLineCount;
 
   const VIEW_HEIGHT = HEIGHT - Y_PADDING * 2;
-  const VIEW_WIDTH = WIDTH - X_PADDING * 2;
+  const VIEW_WIDTH = WIDTH - X_PADDING * 2 + X_PADDING / 2;
 
   const xRatio = Math.round(VIEW_WIDTH / (xArr.length - 2));
   const yRatio = VIEW_HEIGHT / (maxY - minY);
 
   const Y_STEP = VIEW_HEIGHT / Y_LINE_COUNT;
-  const X_STEP = VIEW_WIDTH / X_LINE_COUNT;
   const TEXT_STEP = (maxY - minY) / Y_LINE_COUNT;
 
   useEffect(() => {
@@ -121,7 +144,15 @@ export default function SvgChart() {
     const OYlines = [];
     const OXlines = [];
 
-    for (let i = 1; i < yArr.length; i++) {
+    const xAllStep = [];
+    const xDoneStep = [];
+    const timeForX = [];
+    const allTimeForX = [];
+    const doneTimeForX = [];
+    let xIterStep = 4;
+    const weekDays = ["Sun.", "Mon.", "Tue.", "Wed.", "Thu.", "Fri.", "Sat."];
+
+    for (let i = 1; i < xArr.length; i++) {
       final +=
         String(Math.round(xArr[i]) * xRatio + X_PADDING) +
         " " +
@@ -129,6 +160,29 @@ export default function SvgChart() {
         " ";
     }
 
+    for (let i = 0; i < time.length; i++) {
+      activeBtn.activeName == "1d"
+        ? timeForX.push(time[i].getHours())
+        : activeBtn.activeName == "7d"
+        ? timeForX.push(time[i].getDay())
+        : null;
+    }
+    for (let i = 0; i < xArr.length; i++) {
+      if (timeForX[i] !== timeForX[i + 1]) {
+        xAllStep.push(xArr[i + 1] * xRatio + X_PADDING);
+        activeBtn.activeName == "1d"
+          ? allTimeForX.push(timeForX[i + 1])
+          : activeBtn.activeName == "7d"
+          ? allTimeForX.push(timeForX[i])
+          : null;
+      }
+    }
+
+    activeBtn.activeName == "7d" ? (xIterStep = 1) : null;
+    for (let i = 0; i < xAllStep.length; i += xIterStep) {
+      xDoneStep.push(xAllStep[i]);
+      doneTimeForX.push(allTimeForX[i]);
+    }
     for (let i = 0; i < Y_LINE_COUNT; i++) {
       const Y_LINE = Y_STEP * i;
       OYlines.push({
@@ -136,13 +190,18 @@ export default function SvgChart() {
         text: String(Math.round(maxY - TEXT_STEP * i)),
       });
     }
-
-    for (let i = 0; i < X_LINE_COUNT + 1; i++) {
-      const X_LINE = X_STEP * i;
-      OXlines.push({
-        line: X_LINE + X_PADDING,
-        text: sortedTime[i],
-      });
+    for (let i = 0; i < X_LINE_COUNT; i++) {
+      activeBtn.activeName == "1d"
+        ? OXlines.push({
+            line: xDoneStep[i],
+            text: doneTimeForX[i] + "h.",
+          })
+        : activeBtn.activeName == "7d"
+        ? OXlines.push({
+            line: xDoneStep[i],
+            text: weekDays[doneTimeForX[i]],
+          })
+        : null;
     }
 
     const finalArea =
@@ -167,7 +226,6 @@ export default function SvgChart() {
     <div className="main">
       <h2>BTC to USD</h2>
 
-      {!loaded ? <p>loading...</p> : null}
       {error ? <p>Connection error</p> : null}
 
       <div className="main__btns">
@@ -184,6 +242,8 @@ export default function SvgChart() {
                 activeNum: i + 1,
                 activeName: item.btnName,
                 activeInterval: item.interval,
+                activeLineCount: item.lineCount,
+                activeTextPadding: item.textPadding,
               });
               dispatch(getMainCreator(item.query.interval, item.query.limit));
             }}
@@ -194,73 +254,77 @@ export default function SvgChart() {
       </div>
 
       <div className="main__svg-chart">
-        <svg className="main__svg">
-          <path
-            d={`M ${firstX + X_PADDING} ${
-              Math.round(firstY) - Y_PADDING
-            } ${area}`}
-            className="main__area"
-          />
-
-          {xLines.map((item) => (
-            <g key={item.line}>
-              <text
-                x={item.line - 10}
-                y={HEIGHT - Y_PADDING / 2.5}
-                className="main__text"
-              >
-                {item.text}
-              </text>
-              <line
-                x1={item.line}
-                y1={HEIGHT - Y_PADDING}
-                x2={item.line}
-                y2={Y_PADDING / 2}
-                className="main__backline"
-              />
-            </g>
-          ))}
-
-          <g>
-            {yLines
-              ? yLines.map((item) => (
-                  <g key={item.line}>
-                    <text
-                      x={String(X_PADDING / 4)}
-                      y={String(item.line + 4)}
-                      className="main__text"
-                    >
-                      {item.text}
-                    </text>
-                    <line
-                      x1={String(X_PADDING)}
-                      y1={String(item.line)}
-                      x2={String(WIDTH - X_PADDING / 2)}
-                      y2={String(item.line)}
-                      className="main__backline"
-                    />
-                  </g>
-                ))
-              : null}
-
-            <line
-              x1={String(X_PADDING)}
-              y1={String(HEIGHT - Y_PADDING)}
-              x2={String(WIDTH - X_PADDING / 2)}
-              y2={String(HEIGHT - Y_PADDING)}
-              className="main__under"
-            />
-          </g>
-
-          {stroke ? (
+        {!loaded ? (
+          <p>Loading...</p>
+        ) : (
+          <svg className="main__svg">
             <path
               d={`M ${firstX + X_PADDING} ${
                 Math.round(firstY) - Y_PADDING
-              } ${stroke}`}
-              className="main__path"
+              } ${area}`}
+              className="main__area"
             />
-          ) : null}
-        </svg>
+
+            {xLines.map((item) => (
+              <g key={item.line}>
+                <text
+                  x={item.line + activeBtn.activeTextPadding}
+                  y={HEIGHT - Y_PADDING / 2.5}
+                  className="main__text"
+                >
+                  {item.text}
+                </text>
+                <line
+                  x1={item.line}
+                  y1={HEIGHT - Y_PADDING}
+                  x2={item.line}
+                  y2={Y_PADDING / 2}
+                  className="main__backline"
+                />
+              </g>
+            ))}
+
+            <g>
+              {yLines
+                ? yLines.map((item) => (
+                    <g key={item.line}>
+                      <text
+                        x={String(X_PADDING / 4)}
+                        y={String(item.line + 4)}
+                        className="main__text"
+                      >
+                        {item.text}
+                      </text>
+                      <line
+                        x1={String(X_PADDING)}
+                        y1={String(item.line)}
+                        x2={String(WIDTH - X_PADDING / 2)}
+                        y2={String(item.line)}
+                        className="main__backline"
+                      />
+                    </g>
+                  ))
+                : null}
+
+              <line
+                x1={String(X_PADDING)}
+                y1={String(HEIGHT - Y_PADDING)}
+                x2={String(WIDTH - X_PADDING / 2)}
+                y2={String(HEIGHT - Y_PADDING)}
+                className="main__under"
+              />
+            </g>
+
+            {stroke ? (
+              <path
+                d={`M ${firstX + X_PADDING} ${
+                  Math.round(firstY) - Y_PADDING
+                } ${stroke}`}
+                className="main__path"
+              />
+            ) : null}
+          </svg>
+        )}
       </div>
     </div>
   );

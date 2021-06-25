@@ -10,40 +10,47 @@ const weekDays = ["Sun.", "Mon.", "Tue.", "Wed.", "Thu.", "Fri.", "Sat."];
 function* sortTimeWorker(action) {
   const sorted = [];
   const output = [];
+  let redacted = [];
   const typeForCheck = action.payload.type;
   let iterStep = 10;
-  let iter = 0;
+  const iter = 0; // let
 
   for (let i = 0; i < action.payload.array.length; i++) {
-    if (typeForCheck == "1h") {
-      sorted.push(action.payload.array[i].getMinutes());
-    } else if (typeForCheck == "1d") {
+    if (typeForCheck == "1d") {
       sorted.push(action.payload.array[i].getHours());
     } else if (typeForCheck == "7d") {
       sorted.push(action.payload.array[i].getDay());
     }
   }
-  const redacted = sorted.filter((item, i) => sorted.indexOf(item) == i);
+
+  typeForCheck == "7d"
+    ? (redacted = sorted.filter((item, i) => sorted.indexOf(item) == i)) // reverse for hours
+    : (redacted = sorted
+        .reverse()
+        .filter((item, i) => sorted.indexOf(item) == i)
+        .reverse());
 
   if (redacted.length == 24) {
     iterStep = 4;
+    // iter = 1;
   } else if (redacted.length == 7) {
     iterStep = 1;
-    iter = 1;
+    // iter = 1;
   }
 
-  console.log(redacted);
   for (let i = iter; i < redacted.length; i += iterStep) {
-    if (typeForCheck.split("").includes("h")) {
-      output.push(String(redacted[i] + "m."));
-    } else if (typeForCheck == "1d") {
+    if (typeForCheck == "1d") {
       output.push(String(redacted[i] + "h."));
     } else if (typeForCheck == "7d") {
       output.push(String(weekDays[redacted[i]]));
     }
   }
-  console.log(redacted);
-  console.log(output);
+
+  // typeForCheck == "1d"
+  //   ? output.push(String(redacted[redacted.length - 1] + "h.")) // String(redacted[redacted.length - 1] + "h.")
+  //   : typeForCheck == "7d"
+  //   ? output.push("") // String(weekDays[redacted[0]])
+  //   : null;
 
   yield put(sortTimeSuccessCreator(output));
 }
