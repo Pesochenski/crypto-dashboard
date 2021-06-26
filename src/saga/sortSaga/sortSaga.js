@@ -5,7 +5,21 @@ import {
   sortTimeSuccessCreator,
 } from "../../store/reducers/sortReducers/sortTimeReducer";
 
-// const weekDays = ["Sun.", "Mon.", "Tue.", "Wed.", "Thu.", "Fri.", "Sat."];
+const weekDays = ["Sun.", "Mon.", "Tue.", "Wed.", "Thu.", "Fri.", "Sat."];
+const months = [
+  "Jan.",
+  "Feb.",
+  "Mar.",
+  "Apr.",
+  "May",
+  "Jun.",
+  "Jul.",
+  "Aug.",
+  "Sep.",
+  "Oct.",
+  "Nov.",
+  "Dec.",
+];
 
 function* sortTimeWorker(action) {
   const time = action.payload.array;
@@ -22,6 +36,11 @@ function* sortTimeWorker(action) {
   const allTimeForX = [];
   let xIterStep = 4;
 
+  const allMonth = [];
+  const sortedMonth = [];
+  const outputMonth = [];
+  const outputDate = [];
+
   const outputLines = []; // xDoneStep
   const outputX = []; // xDoneTextStep
   const outputTime = []; // time
@@ -31,35 +50,59 @@ function* sortTimeWorker(action) {
       ? timeForX.push(time[i].getHours())
       : typeForCheck == "7d"
       ? timeForX.push(time[i].getDay())
+      : typeForCheck == "1m"
+      ? allMonth.push(time[i].getMonth()) && timeForX.push(time[i].getDate())
       : null;
   }
-  for (let i = 0; i < xArr.length; i++) {
+
+  for (let i = 0; i < xArr.length - 1; i++) {
     if (timeForX[i] !== timeForX[i + 1]) {
-      // xArr[i + 1] ?
-      xAllStep.push(xArr[i + 1] * xRatio + X_PADDING);
-      // : xAllStep.push(xArr[i] * xRatio + X_PADDING);
+      xArr[i + 1]
+        ? xAllStep.push(xArr[i + 1] * xRatio + X_PADDING)
+        : xAllStep.push(xArr[i] * xRatio + X_PADDING);
       typeForCheck == "1d"
         ? allTimeForX.push(timeForX[i + 1])
         : typeForCheck == "7d"
         ? allTimeForX.push(timeForX[i])
-        : null;
+        : typeForCheck == "1m"
+        ? allTimeForX.push(timeForX[i]) && sortedMonth.push(allMonth[i + 1])
+        : // (allMonth[i + 1] ? sortedMonth.push(allMonth[i + 1]) : null)
+          null;
     }
   }
 
-  typeForCheck == "7d" ? (xIterStep = 1) : null;
+  typeForCheck == "7d"
+    ? (xIterStep = 1)
+    : typeForCheck == "1m"
+    ? (xIterStep = 5)
+    : null;
+
   for (let i = 0; i < xAllStep.length; i += xIterStep) {
-    outputLines.push(xAllStep[i]);
     outputX.push(xAllStep[i]);
-    outputTime.push(allTimeForX[i]);
+    outputLines.push(xAllStep[i]);
+
+    typeForCheck == "1d"
+      ? outputTime.push(allTimeForX[i])
+      : typeForCheck == "7d"
+      ? outputTime.push(weekDays[allTimeForX[i]])
+      : typeForCheck == "1m"
+      ? outputMonth.push(sortedMonth[i]) && outputDate.push(allTimeForX[i])
+      : null;
   }
+
   if (typeForCheck == "7d") {
     if (X_PADDING > xAllStep[0] - 55) {
       const excess = outputX.shift();
-      // console.log(X_PADDING > xAllStep[0] - 55);
       outputX.unshift(xAllStep[0] + VIEW_WIDTH + X_PADDING / 2);
     }
   }
-  console.log(outputLines);
+
+  if (typeForCheck == "1m") {
+    for (let i = 0; i < outputDate.length; i++) {
+      outputTime.push(outputDate[i] + " " + months[outputMonth[i]]);
+    }
+  }
+  console.log(outputTime, outputLines);
 
   yield put(sortTimeSuccessCreator({ outputTime, outputX, outputLines }));
 }

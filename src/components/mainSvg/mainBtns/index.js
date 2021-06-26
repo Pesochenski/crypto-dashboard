@@ -20,7 +20,7 @@ export default function MainChartBtns({ btn, activeBtn, setActiveBtn }) {
             setActiveBtn({
               activeNum: i + 1,
               activeName: item.btnName,
-              activeLineCount: item.lineCount,
+              // activeLineCount: item.lineCount,
               activeTextPadding: item.textPadding,
               activeInterval: item.query.interval,
               activeLimit: item.query.limit,

@@ -22,7 +22,6 @@ export default function SvgChart() {
         interval: "5m",
         limit: "288",
       },
-      lineCount: 6,
       textPadding: -10,
     },
     {
@@ -31,34 +30,30 @@ export default function SvgChart() {
         interval: "2h", // 1h 168 investing.com
         limit: "84",
       },
-      lineCount: 7,
       textPadding: -55,
     },
     {
       btnName: "1m",
       query: {
-        interval: "4h",
-        limit: "180",
+        interval: "4h", // 31 d
+        limit: "186",
       },
-      lineCount: 1,
-      textPadding: 30,
+      textPadding: -20,
     },
     {
       btnName: "3m",
       query: {
-        interval: "8h",
-        limit: "270",
+        interval: "8h", // 93 d
+        limit: "278",
       },
-      lineCount: 1,
       textPadding: -10,
     },
     {
       btnName: "1y",
       query: {
-        interval: "1d",
-        limit: "365",
+        interval: "1w",
+        limit: "52",
       },
-      lineCount: 1,
       textPadding: -10,
     },
   ]);
@@ -66,7 +61,6 @@ export default function SvgChart() {
     {
       activeNum: 1,
       activeName: btn[0].btnName,
-      activeLineCount: btn[0].lineCount,
       activeTextPadding: btn[0].textPadding,
       activeInterval: btn[0].query.interval,
       activeLimit: btn[0].query.limit,
@@ -87,7 +81,7 @@ export default function SvgChart() {
   const X_PADDING = 80;
 
   const Y_LINE_COUNT = 4;
-  const X_LINE_COUNT = activeBtn.activeLineCount;
+  // const X_LINE_COUNT = activeBtn.activeLineCount;
 
   const VIEW_HEIGHT = HEIGHT - Y_PADDING * 2;
   const VIEW_WIDTH = WIDTH - X_PADDING * 2; // + X_PADDING / 2
@@ -142,7 +136,6 @@ export default function SvgChart() {
     let final = "L ";
     const OYlines = [];
     const OXlines = [];
-    const weekDays = ["Sun.", "Mon.", "Tue.", "Wed.", "Thu.", "Fri.", "Sat."];
 
     for (let i = 1; i < xArr.length; i++) {
       final +=
@@ -159,7 +152,8 @@ export default function SvgChart() {
         text: String(Math.round(maxY - TEXT_STEP * i)),
       });
     }
-    for (let i = 0; i < X_LINE_COUNT; i++) {
+    for (let i = 0; i < sortedTime.length; i++) {
+      // i < X_LINE_COUNT
       activeBtn.activeName == "1d"
         ? OXlines.push({
             line: sortedLines[i],
@@ -168,11 +162,17 @@ export default function SvgChart() {
         : activeBtn.activeName == "7d"
         ? OXlines.push({
             line: sortedLines[i],
-            text: weekDays[sortedTime[i]],
+            text: sortedTime[i],
             textStep: sortedX[i],
+          })
+        : activeBtn.activeName == "1m"
+        ? OXlines.push({
+            line: sortedLines[i],
+            text: sortedTime[i],
           })
         : null;
     }
+    // console.log(sortedTime);
 
     const finalArea =
       final +
@@ -237,7 +237,7 @@ export default function SvgChart() {
                 ))
               : xLines && activeBtn.activeName == "7d"
               ? xLines.map((item) => (
-                  <g key={item.line}>
+                  <g key={item.textStep}>
                     <text
                       x={item.textStep + activeBtn.activeTextPadding}
                       y={HEIGHT - Y_PADDING / 2.5}
