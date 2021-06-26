@@ -38,7 +38,7 @@ export default function SvgChart() {
         interval: "4h", // 31 d
         limit: "186",
       },
-      textPadding: -20,
+      textPadding: -30,
     },
     {
       btnName: "3m",
@@ -216,7 +216,8 @@ export default function SvgChart() {
               className="main__area"
             />
 
-            {xLines
+            {xLines &&
+            (activeBtn.activeName == "1d" || activeBtn.activeName == "1m")
               ? xLines.map((item) => (
                   <g key={item.line}>
                     <text
@@ -235,7 +236,7 @@ export default function SvgChart() {
                     />
                   </g>
                 ))
-              : xLines && activeBtn.activeName == "7d"
+              : activeBtn.activeName == "7d"
               ? xLines.map((item) => (
                   <g key={item.textStep}>
                     <text

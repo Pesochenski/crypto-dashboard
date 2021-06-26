@@ -37,6 +37,9 @@ function* sortTimeWorker(action) {
   let xIterStep = 4;
 
   const allMonth = [];
+  const allHours = [];
+  const sortedHours = [];
+  const outputHours = [];
   const sortedMonth = [];
   const outputMonth = [];
   const outputDate = [];
@@ -51,7 +54,9 @@ function* sortTimeWorker(action) {
       : typeForCheck == "7d"
       ? timeForX.push(time[i].getDay())
       : typeForCheck == "1m"
-      ? allMonth.push(time[i].getMonth()) && timeForX.push(time[i].getDate())
+      ? allMonth.push(time[i].getMonth()) &&
+        timeForX.push(time[i].getDate()) &&
+        allHours.push(time[i].getHours())
       : null;
   }
 
@@ -65,10 +70,17 @@ function* sortTimeWorker(action) {
         : typeForCheck == "7d"
         ? allTimeForX.push(timeForX[i])
         : typeForCheck == "1m"
-        ? allTimeForX.push(timeForX[i]) && sortedMonth.push(allMonth[i + 1])
+        ? allTimeForX.push(timeForX[i]) &&
+          sortedMonth.push(allMonth[i + 1]) &&
+          sortedHours.push(allHours[i])
         : // (allMonth[i + 1] ? sortedMonth.push(allMonth[i + 1]) : null)
           null;
     }
+  }
+
+  if (allTimeForX.length == 6 && typeForCheck == "7d") {
+    allTimeForX.push(allTimeForX.length);
+    xAllStep.push(xAllStep[0] - X_PADDING);
   }
 
   typeForCheck == "7d"
@@ -77,7 +89,7 @@ function* sortTimeWorker(action) {
     ? (xIterStep = 5)
     : null;
 
-  for (let i = 0; i < xAllStep.length; i += xIterStep) {
+  for (let i = 0; i < allTimeForX.length; i += xIterStep) {
     outputX.push(xAllStep[i]);
     outputLines.push(xAllStep[i]);
 
@@ -86,7 +98,9 @@ function* sortTimeWorker(action) {
       : typeForCheck == "7d"
       ? outputTime.push(weekDays[allTimeForX[i]])
       : typeForCheck == "1m"
-      ? outputMonth.push(sortedMonth[i]) && outputDate.push(allTimeForX[i])
+      ? outputMonth.push(sortedMonth[i]) &&
+        outputDate.push(allTimeForX[i]) &&
+        outputHours.push(sortedHours[i])
       : null;
   }
 
@@ -95,21 +109,29 @@ function* sortTimeWorker(action) {
       const excess = outputX.shift();
       outputX.unshift(xAllStep[0] + VIEW_WIDTH + X_PADDING / 2);
     }
+
+    if (X_PADDING > xAllStep[xAllStep.length - 1] - 55) {
+      const excess = outputX.pop();
+      outputX.push(xAllStep[xAllStep.length - 1] + VIEW_WIDTH + X_PADDING / 2);
+    }
   }
 
   if (typeForCheck == "1m") {
     for (let i = 0; i < outputDate.length; i++) {
-      outputTime.push(outputDate[i] + " " + months[outputMonth[i]]);
+      outputTime.push(
+        outputDate[i] +
+          " " +
+          months[outputMonth[i]] +
+          " " +
+          outputHours[i] +
+          "h."
+      );
     }
   }
-  console.log(outputTime, outputLines);
+  console.log(outputTime, outputX, outputLines);
 
   yield put(sortTimeSuccessCreator({ outputTime, outputX, outputLines }));
 }
-
-// function* sortMonthWorker(action) {
-// getDate, getMonth exanple; 31 jul.
-// }
 
 export function* sortWatcher() {
   yield takeEvery(SORT_TIME, sortTimeWorker);
