@@ -44,7 +44,7 @@ export default function SvgChart() {
       btnName: "3m",
       query: {
         interval: "8h", // 93 d
-        limit: "278",
+        limit: "273",
       },
       textPadding: -10,
     },

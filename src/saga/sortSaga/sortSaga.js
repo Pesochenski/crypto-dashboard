@@ -70,16 +70,21 @@ function* sortTimeWorker(action) {
         : typeForCheck == "7d"
         ? allTimeForX.push(timeForX[i])
         : typeForCheck == "1m"
-        ? allTimeForX.push(timeForX[i]) &&
+        ? allTimeForX.push(timeForX[i + 1]) &&
           sortedMonth.push(allMonth[i + 1]) &&
-          sortedHours.push(allHours[i])
+          sortedHours.push(allHours[i + 1])
         : // (allMonth[i + 1] ? sortedMonth.push(allMonth[i + 1]) : null)
           null;
     }
   }
+  console.log(allTimeForX);
 
   if (allTimeForX.length == 6 && typeForCheck == "7d") {
-    allTimeForX.push(allTimeForX.length);
+    allTimeForX[allTimeForX.length - 1] < 6
+      ? allTimeForX.push(allTimeForX[allTimeForX.length - 1] + 1)
+      : allTimeForX[allTimeForX.length - 1] == 6
+      ? allTimeForX.push(0)
+      : null;
     xAllStep.push(xAllStep[0] - X_PADDING);
   }
 
@@ -128,7 +133,7 @@ function* sortTimeWorker(action) {
       );
     }
   }
-  console.log(outputTime, outputX, outputLines);
+  console.log(outputTime, allTimeForX);
 
   yield put(sortTimeSuccessCreator({ outputTime, outputX, outputLines }));
 }
