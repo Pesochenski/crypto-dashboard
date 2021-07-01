@@ -164,7 +164,9 @@ export default function SvgChart() {
             text: sortedTime[i],
             textStep: sortedX[i],
           })
-        : activeBtn.activeName == "1m" || activeBtn.activeName == "3m"
+        : activeBtn.activeName == "1m" ||
+          activeBtn.activeName == "3m" ||
+          activeBtn.activeName == "1y"
         ? OXlines.push({
             line: sortedLines[i],
             text: sortedTime[i],
@@ -217,7 +219,8 @@ export default function SvgChart() {
             {xLines &&
             (activeBtn.activeName == "1d" ||
               activeBtn.activeName == "1m" ||
-              activeBtn.activeName == "3m")
+              activeBtn.activeName == "3m" ||
+              activeBtn.activeName == "1y")
               ? xLines.map((item) => (
                   <g key={item.line}>
                     <text

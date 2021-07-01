@@ -36,11 +36,14 @@ function* sortTimeWorker(action) {
   const allTimeForX = [];
   let xIterStep = 4;
 
+  const allYear = [];
   const allMonth = [];
   const allHours = [];
+  const sortedYear = [];
   const sortedHours = [];
   const outputHours = [];
   const sortedMonth = [];
+  const outputYear = [];
   const outputMonth = [];
   const outputDate = [];
 
@@ -57,16 +60,16 @@ function* sortTimeWorker(action) {
       ? allMonth.push(time[i].getMonth()) &&
         timeForX.push(time[i].getDate()) &&
         allHours.push(time[i].getHours())
+      : typeForCheck == "1y"
+      ? allMonth.push(time[i].getMonth()) &&
+        timeForX.push(time[i].getDate()) &&
+        allYear.push(time[i].getFullYear())
       : null;
   }
 
   for (let i = 0; i < xArr.length - 1; i++) {
     if (timeForX[i] !== timeForX[i + 1]) {
-      // xArr[i + 1]
-      //   ? xAllStep.push(xArr[i + 1] * xRatio + X_PADDING)
-      //   : xAllStep.push(xArr[i] * xRatio + X_PADDING);
-
-      typeForCheck !== "3m"
+      typeForCheck !== "3m" && typeForCheck !== "1y"
         ? xArr[i + 1]
           ? xAllStep.push(xArr[i + 1] * xRatio + X_PADDING)
           : xAllStep.push(xArr[i] * xRatio + X_PADDING)
@@ -89,6 +92,13 @@ function* sortTimeWorker(action) {
           sortedMonth.push(allMonth[i + 1]) &&
           sortedHours.push(allHours[i + 1])
         : null;
+
+      typeForCheck == "1y" && allYear[i] !== allYear[i + 1]
+        ? allTimeForX.push(timeForX[i + 1]) &&
+          xAllStep.push(xArr[i + 1] * xRatio + X_PADDING) &&
+          sortedMonth.push(allMonth[i + 1]) &&
+          sortedYear.push(allYear[i + 1])
+        : null;
     }
   }
 
@@ -101,7 +111,7 @@ function* sortTimeWorker(action) {
     xAllStep.push(xAllStep[0] - X_PADDING);
   }
 
-  typeForCheck == "7d" || typeForCheck == "3m"
+  typeForCheck == "7d" || typeForCheck == "3m" || typeForCheck == "1y"
     ? (xIterStep = 1)
     : typeForCheck == "1m"
     ? (xIterStep = 5)
@@ -119,6 +129,10 @@ function* sortTimeWorker(action) {
       ? outputMonth.push(sortedMonth[i]) &&
         outputDate.push(allTimeForX[i]) &&
         outputHours.push(sortedHours[i])
+      : typeForCheck == "1y"
+      ? outputMonth.push(sortedMonth[i]) &&
+        outputDate.push(allTimeForX[i]) &&
+        outputYear.push(sortedYear[i])
       : null;
   }
 
@@ -143,6 +157,12 @@ function* sortTimeWorker(action) {
           " " +
           outputHours[i] +
           "h."
+      );
+    }
+  } else if (typeForCheck == "1y") {
+    for (let i = 0; i < outputDate.length; i++) {
+      outputTime.push(
+        outputDate[i] + " " + months[outputMonth[i]] + " " + outputYear[i]
       );
     }
   }
