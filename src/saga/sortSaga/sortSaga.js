@@ -53,7 +53,7 @@ function* sortTimeWorker(action) {
       ? timeForX.push(time[i].getHours())
       : typeForCheck == "7d"
       ? timeForX.push(time[i].getDay())
-      : typeForCheck == "1m"
+      : typeForCheck == "1m" || typeForCheck == "3m"
       ? allMonth.push(time[i].getMonth()) &&
         timeForX.push(time[i].getDate()) &&
         allHours.push(time[i].getHours())
@@ -62,9 +62,16 @@ function* sortTimeWorker(action) {
 
   for (let i = 0; i < xArr.length - 1; i++) {
     if (timeForX[i] !== timeForX[i + 1]) {
-      xArr[i + 1]
-        ? xAllStep.push(xArr[i + 1] * xRatio + X_PADDING)
-        : xAllStep.push(xArr[i] * xRatio + X_PADDING);
+      // xArr[i + 1]
+      //   ? xAllStep.push(xArr[i + 1] * xRatio + X_PADDING)
+      //   : xAllStep.push(xArr[i] * xRatio + X_PADDING);
+
+      typeForCheck !== "3m"
+        ? xArr[i + 1]
+          ? xAllStep.push(xArr[i + 1] * xRatio + X_PADDING)
+          : xAllStep.push(xArr[i] * xRatio + X_PADDING)
+        : null;
+
       typeForCheck == "1d"
         ? allTimeForX.push(timeForX[i + 1])
         : typeForCheck == "7d"
@@ -75,9 +82,15 @@ function* sortTimeWorker(action) {
           sortedHours.push(allHours[i + 1])
         : // (allMonth[i + 1] ? sortedMonth.push(allMonth[i + 1]) : null)
           null;
+
+      typeForCheck == "3m" && allMonth[i] !== allMonth[i + 1]
+        ? allTimeForX.push(timeForX[i + 1]) &&
+          xAllStep.push(xArr[i + 1] * xRatio + X_PADDING) &&
+          sortedMonth.push(allMonth[i + 1]) &&
+          sortedHours.push(allHours[i + 1])
+        : null;
     }
   }
-  console.log(allTimeForX);
 
   if (allTimeForX.length == 6 && typeForCheck == "7d") {
     allTimeForX[allTimeForX.length - 1] < 6
@@ -88,7 +101,7 @@ function* sortTimeWorker(action) {
     xAllStep.push(xAllStep[0] - X_PADDING);
   }
 
-  typeForCheck == "7d"
+  typeForCheck == "7d" || typeForCheck == "3m"
     ? (xIterStep = 1)
     : typeForCheck == "1m"
     ? (xIterStep = 5)
@@ -102,7 +115,7 @@ function* sortTimeWorker(action) {
       ? outputTime.push(allTimeForX[i])
       : typeForCheck == "7d"
       ? outputTime.push(weekDays[allTimeForX[i]])
-      : typeForCheck == "1m"
+      : typeForCheck == "1m" || typeForCheck == "3m"
       ? outputMonth.push(sortedMonth[i]) &&
         outputDate.push(allTimeForX[i]) &&
         outputHours.push(sortedHours[i])
@@ -121,7 +134,7 @@ function* sortTimeWorker(action) {
     }
   }
 
-  if (typeForCheck == "1m") {
+  if (typeForCheck == "1m" || typeForCheck == "3m") {
     for (let i = 0; i < outputDate.length; i++) {
       outputTime.push(
         outputDate[i] +
@@ -133,7 +146,6 @@ function* sortTimeWorker(action) {
       );
     }
   }
-  console.log(outputTime, allTimeForX);
 
   yield put(sortTimeSuccessCreator({ outputTime, outputX, outputLines }));
 }

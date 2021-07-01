@@ -52,7 +52,7 @@ export default function SvgChart() {
       btnName: "1y",
       query: {
         interval: "1w",
-        limit: "52",
+        limit: "52", // ?? 52 weeks loses several days
       },
       textPadding: -10,
     },
@@ -153,7 +153,6 @@ export default function SvgChart() {
       });
     }
     for (let i = 0; i < sortedTime.length; i++) {
-      // i < X_LINE_COUNT
       activeBtn.activeName == "1d"
         ? OXlines.push({
             line: sortedLines[i],
@@ -165,14 +164,13 @@ export default function SvgChart() {
             text: sortedTime[i],
             textStep: sortedX[i],
           })
-        : activeBtn.activeName == "1m"
+        : activeBtn.activeName == "1m" || activeBtn.activeName == "3m"
         ? OXlines.push({
             line: sortedLines[i],
             text: sortedTime[i],
           })
         : null;
     }
-    // console.log(sortedTime);
 
     const finalArea =
       final +
@@ -217,7 +215,9 @@ export default function SvgChart() {
             />
 
             {xLines &&
-            (activeBtn.activeName == "1d" || activeBtn.activeName == "1m")
+            (activeBtn.activeName == "1d" ||
+              activeBtn.activeName == "1m" ||
+              activeBtn.activeName == "3m")
               ? xLines.map((item) => (
                   <g key={item.line}>
                     <text
