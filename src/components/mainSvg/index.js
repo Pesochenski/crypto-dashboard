@@ -54,7 +54,7 @@ export default function SvgChart() {
         interval: "1w",
         limit: "52", // ?? 52 weeks loses several days
       },
-      textPadding: -10,
+      textPadding: -34,
     },
   ]);
   const [activeBtn, setActiveBtn] = useState([

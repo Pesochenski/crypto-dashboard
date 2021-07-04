@@ -24,12 +24,16 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(css|scss)$/,
-        use: ["style-loader", "css-loader", "sass-loader"]
+        test: /\.(png|jpe?g|svg|gif)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+          },
+        ],
       },
       {
-        test: /\.(jpg|jpeg|png|svg)$/,
-        use: ["file=loader"]
+        test: /\.(css|scss)$/,
+        use: ["style-loader", "css-loader", "sass-loader"]
       },
       {
         test: /\.html$/i,
