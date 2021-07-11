@@ -1,6 +1,7 @@
 import React from "react";
 import "./header.scss";
-import ReactLogo from "../../assets/svg/reactLogo.svg";
+import Foreign from "../../assets/svg/foreign.svg";
+// import ReactLogo from "../../assets/svg/reactLogo.svg";
 
 export default function Header() {
   return (
@@ -20,6 +21,7 @@ export default function Header() {
             target="_blank"
           >
             React
+            <img src={Foreign} className="header__powered-logo" />
           </a>
         </p>
 
