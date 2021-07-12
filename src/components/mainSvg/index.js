@@ -205,7 +205,9 @@ export default function SvgChart() {
       <div className="main__svg-chart">
         {!loaded ? (
           <p>Loading...</p>
-        ) : error ? <p>Connection error</p> : (
+        ) : error ? (
+          <p>Connection error</p>
+        ) : (
           <svg className="main__svg">
             <path
               d={`M ${firstX + X_PADDING} ${
