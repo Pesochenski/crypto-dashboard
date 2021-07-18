@@ -1,15 +1,15 @@
 import React from "react";
-import "./app.scss";
 import Header from "./components/header";
 import SvgChart from "./components/mainSvg";
-import SecondValueChange from "./components/secondValue";
+import SecondValueChange from "./components/secondCurrency";
+import "./App.scss";
 
 export default function App() {
   return (
     <>
       <Header />
 
-      <section>
+      <section className="main-section">
         <SecondValueChange />
         <SvgChart />
       </section>

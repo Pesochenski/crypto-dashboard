@@ -204,9 +204,9 @@ export default function SvgChart() {
 
       <div className="main__svg-chart">
         {!loaded ? (
-          <p>Loading...</p>
+          <p className="main__load-text">Loading...</p>
         ) : error ? (
-          <p>Connection error</p>
+          <p className="main__load-text">Connection error</p>
         ) : (
           <svg className="main__svg">
             <path

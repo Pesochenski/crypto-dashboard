@@ -1,0 +1,61 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap");
+@import '../../styles/colors';
+
+.value-choice {
+  display: flex;
+  flex-direction: column;
+
+  &__input {
+    margin-left: auto;
+    margin-bottom: 12px;
+    padding-left: 10px;
+    border: none;
+    outline: none;
+    width: 150px;
+    height: 40px;
+    background-color: $second-back;
+    border-radius: 12px;
+    transition: 0.3s;
+    border: 1px solid $second-back;
+
+    &::placeholder {
+      font: {
+        family: "Montserrat";
+        size: 14px;
+        weight: 400;
+      }
+      letter-spacing: 0.05em;
+      color: $first-back;
+    }
+    &:focus {
+      border: 1px solid $first-back;
+    }
+  }
+
+  &__btns {
+    margin-left: auto;
+  }
+  &__item {
+    margin-left: 12px;
+    width: 80px;
+    height: 35px;
+    border-radius: 10px;
+    background: none;
+    background-color: $second-back;
+    transition: 0.3s;
+
+    font: {
+      family: "Montserrat";
+      size: 14px;
+      weight: 500;
+    }
+    letter-spacing: 0.05em;
+    &:first-child {
+      margin-left: 0;
+    }
+    &:hover {
+      background-color: $first-back;
+      color: $main-light;
+    }
+  }
+}

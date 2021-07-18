@@ -1,22 +1,36 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap");
+@import '../../styles/colors';
+
 
 .main {
   display: flex;
   flex-direction: column;
-  width: 700px;
+  // width: 700px;
+  width: 100%;
+
+  &__load-text {
+    margin: auto;
+    font: {
+      family: "Montserrat";
+      size: 20px;
+      weight: 400;
+    }
+    color: $main-dark;
+  }
 
   &__svg-chart {
-    border-radius: 25px;
-    background-color: #98e3f021;
+    display: flex;
+    border-radius: 20px;
+    background-color: $second-back;
     transition: 0.3s;
     // margin-top: 30px;
 
-    width: 700px;
+    width: 100%;
     height: 300px;
 
-    &:hover {
-      background-color: #98e3f046;
-    }
+    // &:hover {
+    //   background-color: #98e3f046;
+    // }
   }
 
   &__svg {
@@ -25,30 +39,30 @@
   }
 
   &__backline {
-    stroke: #1282a2;
+    stroke: $first-back;
     stroke-dasharray: 2 4;
     opacity: 0.6;
   }
 
   &__path {
     fill: none;
-    stroke: #309cb9;
+    stroke: $chart;
     stroke-width: 2;
   }
   &__area {
-    fill: #caf0f8;
+    fill: $area;
     opacity: 0.8;
   }
 
   &__under {
-    stroke: #2c7da0;
+    stroke: $first-back;
   }
 
   &__text {
     font-family: "Montserrat";
     font-size: 12px;
     letter-spacing: 0.05em;
-    fill: #1282a2;
+    fill: $first-back;
     opacity: 0.9;
   }
 }

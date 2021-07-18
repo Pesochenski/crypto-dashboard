@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap");
+@import '../../../styles/colors';
 
 .btns {
   margin-left: auto;
@@ -9,9 +10,9 @@
     height: 25px;
     border-radius: 8px;
     margin-left: 10px;
-    background-color: #98e3f021;
+    background-color: $second-back;
     transition: 0.3s;
-    color: #13708a;
+    color: $main-dark;
 
     outline: none;
     border: none;
@@ -27,14 +28,15 @@
       margin-left: 0;
     }
     &:hover {
-      background-color: #98e3f046;
+      background-color: $first-back;
+      color: $main-light;
     }
   }
 
   &__active-btn {
     @extend .btns__btn;
 
-    background-color: #309cb9;
-    color: white;
+    background-color: $main-dark;
+    color: $main-light;
   }
 }
