@@ -34,28 +34,63 @@
 
   &__btns {
     margin-left: auto;
+    display: flex;
+  }
+
+  &__svg {
+    width: 34px;
+    height: 34px;
+  }
+  &__cross {
+    stroke: $first-back;
+    stroke-width: 1.2;
+    &_hover {
+      stroke: $main-light;
+      stroke-width: 1.2;
+    }
   }
   &__item {
+    cursor: pointer;
     margin-left: 12px;
-    width: 80px;
-    height: 35px;
+    width: 100px;
+    height: 34px;
     border-radius: 10px;
     background: none;
     background-color: $second-back;
     transition: 0.3s;
+    display: flex;
 
-    font: {
-      family: "Montserrat";
-      size: 14px;
-      weight: 500;
+    &-text {
+      font: {
+        family: "Montserrat";
+        size: 14px;
+        weight: 500;
+      }
+      letter-spacing: 0.05em;
+      color: $main-dark;
+      &_hover {
+        color: $main-light;
+      }
     }
-    letter-spacing: 0.05em;
     &:first-child {
       margin-left: 0;
     }
     &:hover {
       background-color: $first-back;
-      color: $main-light;
+    }
+
+    &-name {
+      display: flex;
+      width: 66px;
+      height: 34px;
+      justify-content: center;
+      align-items: center;
+    }
+    &-del {
+      width: 34px;
+      height: 34px;
+      background: none;
+      border-left: 2px solid $main-light;
     }
   }
 }
