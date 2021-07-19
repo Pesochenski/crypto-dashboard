@@ -57,15 +57,13 @@ export default function SvgChart() {
       textPadding: -34,
     },
   ]);
-  const [activeBtn, setActiveBtn] = useState([
-    {
-      activeNum: 1,
-      activeName: btn[0].btnName,
-      activeTextPadding: btn[0].textPadding,
-      activeInterval: btn[0].query.interval,
-      activeLimit: btn[0].query.limit,
-    },
-  ]);
+  const [activeBtn, setActiveBtn] = useState({
+    activeNum: 1,
+    activeName: btn[0].btnName,
+    activeTextPadding: btn[0].textPadding,
+    activeInterval: btn[0].query.interval,
+    activeLimit: btn[0].query.limit,
+  });
 
   const dispatch = useDispatch();
   const { loaded, error, xArr, yArr, time } = useSelector(
@@ -194,8 +192,6 @@ export default function SvgChart() {
 
   return (
     <div className="main">
-      <h2>BTC/USD</h2>
-
       <MainChartBtns
         btn={btn}
         activeBtn={activeBtn}
