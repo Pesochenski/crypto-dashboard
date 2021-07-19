@@ -1,4 +1,5 @@
 import React from "react";
+import "./state.scss";
 
 export default function CurrencyState() {
   return (

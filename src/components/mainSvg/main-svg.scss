@@ -64,5 +64,9 @@
     letter-spacing: 0.05em;
     fill: $first-back;
     opacity: 0.9;
+    transition: 0.2s;
+    &:hover { 
+      fill: $main-dark;
+    }
   }
 }

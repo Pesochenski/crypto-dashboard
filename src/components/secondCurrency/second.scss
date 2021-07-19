@@ -14,9 +14,16 @@
     width: 150px;
     height: 40px;
     background-color: $second-back;
-    border-radius: 12px;
+    border-radius: 10px;
     transition: 0.3s;
-    border: 1px solid $second-back;
+    border: 2px solid $second-back;
+    font: {
+      family: "Montserrat";
+      size: 14px;
+      weight: 500;
+    }
+    letter-spacing: 0.05em;
+    color: $main-dark;
 
     &::placeholder {
       font: {
@@ -28,7 +35,7 @@
       color: $first-back;
     }
     &:focus {
-      border: 1px solid $first-back;
+      border: 2px solid $first-back;
     }
   }
 
@@ -46,6 +53,10 @@
     stroke: $main-dark;
     stroke-width: 1.2;
     &_hover {
+      stroke: $main-light;
+      stroke-width: 1.2;
+    }
+    &_active {
       stroke: $main-light;
       stroke-width: 1.2;
     }
@@ -72,12 +83,18 @@
       &_hover {
         color: $main-light;
       }
+      &_active {
+        color: $main-light;
+      }
     }
     &:first-child {
       margin-left: 0;
     }
     &:hover {
       background-color: $first-back;
+    }
+    &_active {
+      background-color: $main-dark;
     }
 
     &-name {

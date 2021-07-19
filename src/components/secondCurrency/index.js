@@ -1,36 +1,59 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./second.scss";
 
 export default function SecondValueChange() {
   const [values, setValues] = useState(["USD", "BTC", "ETH", "LTC"]);
   const [activeItem, setActiveItem] = useState(0);
-  useEffect(() => {
-    console.log(activeItem);
-  }, [activeItem]);
+  const [inputValue, setInputValue] = useState("");
+
+  const [activeCur, setActiveCur] = useState({ activeCurNum: 1 });
+
+  function deleteItem(item) {
+    setValues(values.filter((cur) => cur !== item));
+  }
 
   return (
     <div className="value-choice">
-      <input className="value-choice__input" type="text" placeholder="Add" />
+      <input
+        className="value-choice__input"
+        type="text"
+        placeholder="Add"
+        maxLength="5"
+        onChange={(e) => setInputValue(e.target.value)}
+        onKeyPress={(e) =>
+          e.key === "Enter" ? setValues([...values, e.target.value]) : null
+        }
+      />
       <div className="value-choice__btns">
         {values.map((item, i) => (
           <div
             key={i}
-            className="value-choice__item"
+            className={
+              activeCur.activeCurNum == i + 1
+                ? "value-choice__item value-choice__item_active"
+                : "value-choice__item"
+            }
             onMouseEnter={() => setActiveItem(i + 1)}
             onMouseLeave={() => setActiveItem(0)}
+            onClick={() => setActiveCur({ activeCurNum: i + 1 })}
           >
             <div className="value-choice__item-name">
               <p
                 className={
                   activeItem == i + 1
                     ? "value-choice__item-text value-choice__item-text_hover"
+                    : activeCur.activeCurNum == i + 1
+                    ? "value-choice__item-text value-choice__item-text_active"
                     : "value-choice__item-text"
                 }
               >
                 {item}
               </p>
             </div>
-            <button className="value-choice__item-del">
+            <button
+              className="value-choice__item-del"
+              onClick={() => deleteItem(item)}
+            >
               <svg className="value-choice__svg" viewBox="0 0 34 34">
                 <line
                   x1="4"
@@ -40,6 +63,8 @@ export default function SecondValueChange() {
                   className={
                     activeItem == i + 1
                       ? "value-choice__cross_hover"
+                      : activeCur.activeCurNum == i + 1
+                      ? "value-choice__cross_active"
                       : "value-choice__cross"
                   }
                 />
@@ -51,6 +76,8 @@ export default function SecondValueChange() {
                   className={
                     activeItem == i + 1
                       ? "value-choice__cross_hover"
+                      : activeCur.activeCurNum == i + 1
+                      ? "value-choice__cross_active"
                       : "value-choice__cross"
                   }
                 />
