@@ -9,7 +9,9 @@ export default function SecondValueChange() {
   const [activeCur, setActiveCur] = useState({ activeCurNum: 1 });
 
   function deleteItem(item) {
-    setValues(values.filter((cur) => cur !== item));
+    if (values.length > 1) {
+      setValues(values.filter((cur) => cur !== item));
+    }
   }
 
   return (
@@ -21,7 +23,9 @@ export default function SecondValueChange() {
         maxLength="5"
         onChange={(e) => setInputValue(e.target.value)}
         onKeyPress={(e) =>
-          e.key === "Enter" ? setValues([...values, e.target.value]) : null
+          e.key === "Enter" && values.length <= 5
+            ? setValues([...values, e.target.value])
+            : null
         }
       />
       <div className="value-choice__btns">
