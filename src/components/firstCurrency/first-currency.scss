@@ -1,0 +1,38 @@
+@import "../../styles/colors";
+
+.currency-choice {
+  &__values {
+    display: flex;
+    width: 415px;
+    height: 415px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  &__item {
+    margin-top: 15px;
+    width: 200px;
+    height: 200px;
+    background-color: $second-back;
+    border-radius: 18px;
+    transition: 0.3s;
+    &:hover {
+      background-color: $first-back;
+    }
+  }
+
+  &__btns {
+    margin-top: 20px;
+    padding: 0 auto 0 auto;
+  }
+  &__btn {
+    margin-left: 8px;
+    border-radius: 4px;
+    width: 8px;
+    height: 8px;
+    border: 2px solid $main-dark;
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}

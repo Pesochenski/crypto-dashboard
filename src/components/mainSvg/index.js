@@ -256,6 +256,14 @@ export default function SvgChart() {
                 ))
               : null}
             <g>
+              <line
+                x1={String(X_PADDING)}
+                y1={String(HEIGHT - Y_PADDING)}
+                x2={String(WIDTH - X_PADDING / 2)}
+                y2={String(HEIGHT - Y_PADDING)}
+                className="main__under"
+              />
+
               {yLines
                 ? yLines.map((item) => (
                     <g key={item.line}>
@@ -276,14 +284,6 @@ export default function SvgChart() {
                     </g>
                   ))
                 : null}
-
-              <line
-                x1={String(X_PADDING)}
-                y1={String(HEIGHT - Y_PADDING)}
-                x2={String(WIDTH - X_PADDING / 2)}
-                y2={String(HEIGHT - Y_PADDING)}
-                className="main__under"
-              />
             </g>
 
             {stroke ? (

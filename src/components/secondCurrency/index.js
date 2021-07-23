@@ -24,7 +24,7 @@ export default function SecondValueChange() {
         onChange={(e) => setInputValue(e.target.value)}
         onKeyPress={(e) =>
           e.key === "Enter" && values.length <= 5
-            ? setValues([...values, e.target.value])
+            ? setValues([...values, e.target.value.toUpperCase()])
             : null
         }
       />

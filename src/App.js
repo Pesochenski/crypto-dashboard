@@ -4,16 +4,21 @@ import SvgChart from "./components/mainSvg";
 import SecondValueChange from "./components/secondCurrency";
 import "./App.scss";
 import CurrencyState from "./components/currencyState";
+import { FirstCurrencyChange } from "./components/firstCurrency";
 
 export default function App() {
   return (
     <>
       <Header />
 
-      <CurrencyState />
       <section className="main-section">
-        <SecondValueChange />
-        <SvgChart />
+        <FirstCurrencyChange />
+
+        <section className="chart-section">
+          <CurrencyState />
+          <SecondValueChange />
+          <SvgChart />
+        </section>
       </section>
     </>
   );

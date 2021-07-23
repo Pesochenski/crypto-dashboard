@@ -1,6 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap");
-@import '../../styles/colors';
-
+@import "../../styles/colors";
 
 .main {
   display: flex;
@@ -20,7 +19,7 @@
 
   &__svg-chart {
     display: flex;
-    border-radius: 20px;
+    border-radius: 16px;
     background-color: $second-back;
     transition: 0.3s;
     // margin-top: 30px;
@@ -65,7 +64,7 @@
     fill: $first-back;
     opacity: 0.9;
     transition: 0.2s;
-    &:hover { 
+    &:hover {
       fill: $main-dark;
     }
   }
