@@ -1,6 +1,9 @@
 @import "../../styles/colors";
 
 .currency-choice {
+  display: flex;
+  flex-direction: column;
+  margin-right: 20px;
   &__values {
     display: flex;
     width: 415px;
@@ -22,17 +25,59 @@
   }
 
   &__btns {
-    margin-top: 20px;
-    padding: 0 auto 0 auto;
+    margin: 30px auto 0 auto;
+    display: flex;
   }
   &__btn {
     margin-left: 8px;
-    border-radius: 4px;
-    width: 8px;
-    height: 8px;
-    border: 2px solid $main-dark;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    border: 1px solid $first-back;
+    background-color: $second-back;
+    transition: 0.2s;
     &:first-child {
       margin-left: 0;
+    }
+    &:hover {
+      border: 1px solid $first-back;
+      background-color: $first-back;
+    }
+
+    &_active {
+      background-color: $main-dark;
+    }
+  }
+
+  &__input {
+    padding-left: 10px;
+    border: none;
+    outline: none;
+    width: 200px;
+    height: 40px;
+    background-color: $second-back;
+    border-radius: 10px;
+    transition: 0.3s;
+    border: 2px solid $second-back;
+    font: {
+      family: "Montserrat";
+      size: 14px;
+      weight: 500;
+    }
+    letter-spacing: 0.05em;
+    color: $main-dark;
+
+    &::placeholder {
+      font: {
+        family: "Montserrat";
+        size: 14px;
+        weight: 400;
+      }
+      letter-spacing: 0.05em;
+      color: $first-back;
+    }
+    &:focus {
+      border: 2px solid $first-back;
     }
   }
 }

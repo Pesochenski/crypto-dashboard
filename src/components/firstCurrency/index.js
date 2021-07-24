@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./first-currency.scss";
 
 export function FirstCurrencyChange() {
@@ -10,7 +10,11 @@ export function FirstCurrencyChange() {
     "ADA",
   ]);
   const [renderArr, setRenderArr] = useState([]);
+  const [activePag, setActivePag] = useState(0);
 
+  useEffect(() => {
+    renderItems(0);
+  }, []);
   function renderItems(num) {
     const newRender = [];
     for (let i = num; i < num + 4; i++) {
@@ -19,11 +23,22 @@ export function FirstCurrencyChange() {
       }
     }
     setRenderArr(newRender);
+    setActivePag(num);
   }
 
   return (
     <div className="currency-choice">
-      <input type="text" placeholder="Add" />
+      <input
+        type="text"
+        placeholder="Add"
+        maxLength="5"
+        className="currency-choice__input"
+        onKeyPress={(e) =>
+          e.key === "Enter"
+            ? setFirstValues([...firstValues, e.target.value.toUpperCase()])
+            : null
+        }
+      />
       <div className="currency-choice__values">
         {renderArr.map((item, i) => (
           <div key={i} className="currency-choice__item">
@@ -33,13 +48,21 @@ export function FirstCurrencyChange() {
       </div>
       <div className="currency-choice__btns">
         <button
-          className="currency-choice__btn"
+          className={
+            activePag === 0
+              ? "currency-choice__btn_active currency-choice__btn"
+              : "currency-choice__btn"
+          }
           onClick={() => renderItems(0)}
         />
         {firstValues.map((item, i) =>
           (i + 1) % 4 === 0 ? (
             <button
-              className="currency-choice__btn"
+              className={
+                activePag === i + 1
+                  ? "currency-choice__btn_active currency-choice__btn"
+                  : "currency-choice__btn"
+              }
               onClick={() => renderItems(i + 1)}
             />
           ) : null

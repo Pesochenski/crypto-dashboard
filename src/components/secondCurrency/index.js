@@ -4,7 +4,6 @@ import "./second.scss";
 export default function SecondValueChange() {
   const [values, setValues] = useState(["USD", "BTC", "ETH", "LTC"]);
   const [activeItem, setActiveItem] = useState(0);
-  const [inputValue, setInputValue] = useState("");
 
   const [activeCur, setActiveCur] = useState({ activeCurNum: 1 });
 
@@ -21,7 +20,6 @@ export default function SecondValueChange() {
         type="text"
         placeholder="Add"
         maxLength="5"
-        onChange={(e) => setInputValue(e.target.value)}
         onKeyPress={(e) =>
           e.key === "Enter" && values.length <= 5
             ? setValues([...values, e.target.value.toUpperCase()])
