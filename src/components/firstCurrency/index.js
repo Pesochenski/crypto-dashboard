@@ -27,7 +27,7 @@ export function FirstCurrencyChange() {
   }
 
   return (
-    <div className="currency-choice">
+    <section className="currency-choice">
       <input
         type="text"
         placeholder="Add"
@@ -68,6 +68,6 @@ export function FirstCurrencyChange() {
           ) : null
         )}
       </div>
-    </div>
+    </section>
   );
 }

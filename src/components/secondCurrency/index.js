@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import CurrencyState from "../currencyState";
 import "./second.scss";
 
 export default function SecondValueChange() {
@@ -15,17 +16,20 @@ export default function SecondValueChange() {
 
   return (
     <div className="value-choice">
-      <input
-        className="value-choice__input"
-        type="text"
-        placeholder="Add"
-        maxLength="5"
-        onKeyPress={(e) =>
-          e.key === "Enter" && values.length <= 5
-            ? setValues([...values, e.target.value.toUpperCase()])
-            : null
-        }
-      />
+      <div className="value-choice__header">
+        <CurrencyState />
+        <input
+          className="value-choice__input"
+          type="text"
+          placeholder="Add"
+          maxLength="5"
+          onKeyPress={(e) =>
+            e.key === "Enter" && values.length <= 5
+              ? setValues([...values, e.target.value.toUpperCase()])
+              : null
+          }
+        />
+      </div>
       <div className="value-choice__btns">
         {values.map((item, i) => (
           <div

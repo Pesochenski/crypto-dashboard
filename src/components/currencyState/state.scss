@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap');
-@import '../../styles/colors';
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap");
+@import "../../styles/colors";
 
 .state-shown {
-  width: 140px;
-  height: 50px;
+  width: 120px;
+  height: 40px;
   border-radius: 12px;
   background-color: $second-back;
   display: flex;
@@ -12,9 +12,9 @@
 
   &__text {
     font: {
-      family: 'Montserrat';
-      size: 18px;
-      weight: 500;
+      family: "Montserrat";
+      size: 16px;
+      weight: 600;
     }
     letter-spacing: 0.02em;
   }

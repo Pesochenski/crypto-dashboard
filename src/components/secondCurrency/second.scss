@@ -1,9 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap");
-@import '../../styles/colors';
+@import "../../styles/colors";
 
 .value-choice {
   display: flex;
   flex-direction: column;
+
+  &__header {
+    width: 100%;
+    display: flex;
+  }
 
   &__input {
     margin-left: auto;
