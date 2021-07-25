@@ -15,6 +15,10 @@ export function FirstCurrencyChange() {
   useEffect(() => {
     renderItems(0);
   }, []);
+  useEffect(() => {
+    renderItems(activePag);
+  }, [firstValues]);
+
   function renderItems(num) {
     const newRender = [];
     for (let i = num; i < num + 4; i++) {
@@ -28,8 +32,16 @@ export function FirstCurrencyChange() {
 
   function deleteAnyItem(item) {
     if (firstValues.length > 3 && renderArr.length > 3) {
+      // отрабатывает на любом паге хотя нужно только на 1
       setFirstValues(firstValues.filter((cur) => cur !== item));
-      setRenderArr(renderArr.filter((cur) => cur !== item));
+      //   setRenderArr(renderArr.filter((cur) => cur !== item));
+
+      //   const findIndex = firstValues.indexOf(item);
+
+      //   console.log(findIndex, firstValues, renderArr);
+      //   if (firstValues.includes(firstValues[findIndex + 1])) {
+      //     setRenderArr([...renderArr, firstValues[findIndex + 1]]);
+      //   }
     }
 
     // for (let i = 0; i < renderArr.length; i++) {
