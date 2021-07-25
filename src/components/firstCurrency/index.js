@@ -26,6 +26,32 @@ export function FirstCurrencyChange() {
     setActivePag(num);
   }
 
+  function deleteAnyItem(item) {
+    if (firstValues.length > 3 && renderArr.length > 3) {
+      setFirstValues(firstValues.filter((cur) => cur !== item));
+      setRenderArr(renderArr.filter((cur) => cur !== item));
+    }
+
+    // for (let i = 0; i < renderArr.length; i++) {
+    //   for (let j = 0; i < firstValues.length; j++) {
+    //     if (renderArr[i] === firstValues[j]) {
+    //       setRenderArr([...renderArr, firstValues[j]]);
+    //       return;
+    //     }
+    //   }
+    // }
+  }
+
+  function addItem(e) {
+    if (e.key === "Enter") {
+      setFirstValues([...firstValues, e.target.value.toUpperCase()]);
+
+      if (renderArr.length < 4) {
+        setRenderArr([...renderArr, e.target.value.toUpperCase()]);
+      }
+    }
+  }
+
   return (
     <section className="currency-choice">
       <input
@@ -33,16 +59,20 @@ export function FirstCurrencyChange() {
         placeholder="Add"
         maxLength="5"
         className="currency-choice__input"
-        onKeyPress={(e) =>
-          e.key === "Enter"
-            ? setFirstValues([...firstValues, e.target.value.toUpperCase()])
-            : null
-        }
+        onKeyPress={(e) => addItem(e)}
       />
       <div className="currency-choice__values">
         {renderArr.map((item, i) => (
           <div key={i} className="currency-choice__item">
-            <p className="currency-choice__title">{item}</p>
+            <div className="currency-choice__item-header">
+              <p className="currency-choice__item-title">{item}</p>
+              <button
+                className="currency-choice__item-del"
+                onClick={() => deleteAnyItem(item)}
+              >
+                Delete
+              </button>
+            </div>
           </div>
         ))}
       </div>
@@ -56,7 +86,7 @@ export function FirstCurrencyChange() {
           onClick={() => renderItems(0)}
         />
         {firstValues.map((item, i) =>
-          (i + 1) % 4 === 0 ? (
+          (i + 1) % 4 === 0 ? ( // если число массива четное то даже при отсутствующих дальше айтемов создается лишняя кнопка
             <button
               className={
                 activePag === i + 1

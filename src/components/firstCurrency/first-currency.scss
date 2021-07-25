@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap");
 @import "../../styles/colors";
 
 .currency-choice {
@@ -21,6 +22,32 @@
     transition: 0.3s;
     &:hover {
       background-color: $first-back;
+    }
+
+    &-title {
+      font: {
+        family: 'Montserrat';
+        size: 14px;
+        weight: 400; 
+      };
+      letter-spacing: 0.02em;
+    }
+    &-header {
+      margin-top: 15px;
+      width: 100%;
+      display: flex;
+      padding: 0 22px 0 22px;
+    }
+    &-del {
+      margin-left: auto;
+      background: none;
+      outline: none;
+      border: none;
+      font: {
+        family: "Montserrat";
+        size: 12px;
+        weight: 300;
+      };
     }
   }
 

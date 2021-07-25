@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CurrencyState from "../currencyState";
 import "./second.scss";
 
@@ -13,6 +13,11 @@ export default function SecondValueChange() {
       setValues(values.filter((cur) => cur !== item));
     }
   }
+  useEffect(() => {
+    if (activeCur.activeCurNum > values.length - 1) {
+      setActiveCur({ activeCurNum: 1 });
+    }
+  }, [values]);
 
   return (
     <div className="value-choice">
