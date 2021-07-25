@@ -31,7 +31,7 @@ export function FirstCurrencyChange() {
   }
 
   function deleteAnyItem(item) {
-    if (firstValues.length > 3 && renderArr.length > 3) {
+    if (firstValues.length > 3 || (renderArr.length > 3 && activePag === 0)) {
       // отрабатывает на любом паге хотя нужно только на 1
       setFirstValues(firstValues.filter((cur) => cur !== item));
       //   setRenderArr(renderArr.filter((cur) => cur !== item));
@@ -98,7 +98,8 @@ export function FirstCurrencyChange() {
           onClick={() => renderItems(0)}
         />
         {firstValues.map((item, i) =>
-          (i + 1) % 4 === 0 ? ( // если число массива четное то даже при отсутствующих дальше айтемов создается лишняя кнопка
+          (i + 1) % 4 === 0 &&
+          firstValues.length > firstValues.indexOf(item) + 1 ? (
             <button
               className={
                 activePag === i + 1
