@@ -16,7 +16,7 @@
     padding-left: 10px;
     border: none;
     outline: none;
-    width: 150px;
+    width: 100px;
     height: 40px;
     background-color: $second-back;
     border-radius: 10px;
@@ -40,6 +40,7 @@
       color: $first-back;
     }
     &:focus {
+      width: 150px;
       border: 2px solid $first-back;
     }
   }
