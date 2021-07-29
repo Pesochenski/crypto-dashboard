@@ -68,7 +68,7 @@ export function FirstCurrencyChange() {
   }
 
   function addItem(e) {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && e.target.value.trim()) {
       setFirstValues([...firstValues, e.target.value.toUpperCase()]);
 
       if (renderArr.length < 4) {

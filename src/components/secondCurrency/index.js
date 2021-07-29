@@ -3,10 +3,13 @@ import CurrencyState from "../currencyState";
 import "./second.scss";
 
 export default function SecondValueChange() {
-  const [values, setValues] = useState(["USD", "BTC", "ETH", "LTC"]);
+  const [values, setValues] = useState(["USDT", "BTC", "ETH", "LTC"]);
   const [activeItem, setActiveItem] = useState(0);
 
-  const [activeCur, setActiveCur] = useState({ activeCurNum: 1 });
+  const [activeCur, setActiveCur] = useState({
+    activeCurName: values[0],
+    activeCurNum: 1,
+  });
 
   function deleteItem(item) {
     if (values.length > 1) {
@@ -15,7 +18,7 @@ export default function SecondValueChange() {
   }
   useEffect(() => {
     if (activeCur.activeCurNum > values.length - 1) {
-      setActiveCur({ activeCurNum: 1 });
+      setActiveCur({ activeCurName: values[0], activeCurNum: 1 });
     }
   }, [values]);
 
@@ -29,7 +32,7 @@ export default function SecondValueChange() {
           placeholder="Add"
           maxLength="5"
           onKeyPress={(e) =>
-            e.key === "Enter" && values.length <= 5
+            e.key === "Enter" && values.length <= 5 && e.target.value.trim()
               ? setValues([...values, e.target.value.toUpperCase()])
               : null
           }
@@ -46,7 +49,9 @@ export default function SecondValueChange() {
             }
             onMouseEnter={() => setActiveItem(i + 1)}
             onMouseLeave={() => setActiveItem(0)}
-            onClick={() => setActiveCur({ activeCurNum: i + 1 })}
+            onClick={() =>
+              setActiveCur({ activeCurName: item, activeCurNum: i + 1 })
+            }
           >
             <div className="value-choice__item-name">
               <p

@@ -78,19 +78,20 @@
     border-radius: 50%;
     width: 15px;
     height: 15px;
-    border: 1px solid $first-back;
+    border: 2px solid $first-back;
     background-color: $second-back;
     transition: 0.2s;
     &:first-child {
       margin-left: 0;
     }
     &:hover {
-      border: 1px solid $first-back;
+      // border: 2px solid $first-back;
       background-color: $first-back;
     }
 
     &_active {
       background-color: $main-dark;
+      border: 2px solid $main-dark;
     }
   }
 
