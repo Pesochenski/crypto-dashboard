@@ -96,7 +96,6 @@ export default function SvgChart() {
   const TEXT_STEP = (maxY - minY) / Y_LINE_COUNT;
 
   useEffect(() => {
-    console.log(first, second, stateLimit, stateInterval);
     dispatch(getMainCreator(first, second, stateInterval, stateLimit));
   }, [first, second, stateLimit, stateInterval]);
 
@@ -121,7 +120,7 @@ export default function SvgChart() {
     const yData = [];
 
     for (const y of yArr) {
-      yData.push(Math.round(y));
+      yData.push(y);
     }
 
     for (let i = 0; i < yData.length; i++) {
@@ -136,8 +135,8 @@ export default function SvgChart() {
       yData[minIndex] = stock;
     }
 
-    setMinY(Math.round(yData[0]));
-    setMaxY(Math.round(yData[yData.length - 1]));
+    setMinY(yData[0]);
+    setMaxY(yData[yData.length - 1]);
   }
 
   function drawing() {
@@ -147,9 +146,9 @@ export default function SvgChart() {
 
     for (let i = 1; i < xArr.length; i++) {
       final +=
-        String(Math.round(xArr[i]) * xRatio + X_PADDING) +
+        String(xArr[i] * xRatio + X_PADDING) +
         " " +
-        String(HEIGHT - Math.round((yArr[i] - minY) * yRatio) - Y_PADDING) +
+        String(HEIGHT - (yArr[i] - minY) * yRatio - Y_PADDING) +
         " ";
     }
 
@@ -157,7 +156,7 @@ export default function SvgChart() {
       const Y_LINE = Y_STEP * i;
       OYlines.push({
         line: Y_LINE + Y_PADDING,
-        text: String(Math.round(maxY - TEXT_STEP * i)),
+        text: String((maxY - TEXT_STEP * i).toFixed(5)),
       });
     }
     for (let i = 0; i < sortedTime.length; i++) {
@@ -184,11 +183,11 @@ export default function SvgChart() {
 
     const finalArea =
       final +
-      String(Math.round(xArr[xArr.length - 1]) * xRatio + X_PADDING) +
+      String(xArr[xArr.length - 1] * xRatio + X_PADDING) +
       " " +
       String(HEIGHT - Y_PADDING) +
       " " +
-      String(Math.round(xArr[0]) * xRatio + X_PADDING) +
+      String(xArr[0] * xRatio + X_PADDING) +
       " " +
       String(HEIGHT - Y_PADDING) +
       " ";

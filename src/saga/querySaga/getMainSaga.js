@@ -16,7 +16,6 @@ function* getMainWorker(action) {
       action.payload.interval,
       action.payload.limit
     );
-    console.log(res.data);
 
     const payload = yield call(
       () =>
