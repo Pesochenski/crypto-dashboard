@@ -156,7 +156,10 @@ export default function SvgChart() {
       const Y_LINE = Y_STEP * i;
       OYlines.push({
         line: Y_LINE + Y_PADDING,
-        text: String((maxY - TEXT_STEP * i).toFixed(5)),
+        text:
+          second !== "USDT"
+            ? String((maxY - TEXT_STEP * i).toFixed(5))
+            : String((maxY - TEXT_STEP * i).toFixed(1)),
       });
     }
     for (let i = 0; i < sortedTime.length; i++) {

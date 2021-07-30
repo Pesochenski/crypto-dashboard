@@ -55,32 +55,11 @@ export function FirstCurrencyChange() {
   function deleteAnyItem(item) {
     if (firstValues.length > 3 || (renderArr.length > 3 && activePag === 0)) {
       setFirstValues(firstValues.filter((cur) => cur !== item));
-      //   setRenderArr(renderArr.filter((cur) => cur !== item));
-
-      //   const findIndex = firstValues.indexOf(item);
-
-      //   console.log(findIndex, firstValues, renderArr);
-      //   if (firstValues.includes(firstValues[findIndex + 1])) {
-      //     setRenderArr([...renderArr, firstValues[findIndex + 1]]);
-      //   }
     }
-
-    // for (let i = 0; i < renderArr.length; i++) {
-    //   for (let j = 0; i < firstValues.length; j++) {
-    //     if (renderArr[i] === firstValues[j]) {
-    //       setRenderArr([...renderArr, firstValues[j]]);
-    //       return;
-    //     }
-    //   }
-    // }
   }
 
   function addItem(e) {
-    if (
-      e.key === "Enter" &&
-      e.target.value.trim() // &&
-      // e.target.value.toUpperCase() !== ("USD" || "USDT")
-    ) {
+    if (e.key === "Enter" && e.target.value.trim()) {
       setFirstValues([...firstValues, e.target.value.toUpperCase()]);
 
       if (renderArr.length < 4) {
