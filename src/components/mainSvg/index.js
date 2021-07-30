@@ -72,6 +72,11 @@ export default function SvgChart() {
   const { sortedTime, sortedX, sortedLines } = useSelector(
     (state) => state.sortTime
   );
+  const { first } = useSelector((state) => state.firstCurrency);
+  const { second } = useSelector((state) => state.secondCurrency);
+  const { stateLimit, stateInterval } = useSelector(
+    (state) => state.limitInterval
+  );
 
   const HEIGHT = 300;
   const WIDTH = 700;
@@ -91,13 +96,18 @@ export default function SvgChart() {
   const TEXT_STEP = (maxY - minY) / Y_LINE_COUNT;
 
   useEffect(() => {
+    console.log(first, second, stateLimit, stateInterval);
+    dispatch(getMainCreator(first, second, stateInterval, stateLimit));
+  }, [first, second, stateLimit, stateInterval]);
+
+  useEffect(() => {
     const svgInterval = setInterval(() => {
-      dispatch(getMainCreator(activeBtn.activeInterval, activeBtn.activeLimit));
+      dispatch(getMainCreator(first, second, stateInterval, stateLimit));
     }, 60 * 1000);
     return () => clearInterval(svgInterval);
   }, [xArr]);
   useEffect(() => {
-    dispatch(getMainCreator(btn[0].query.interval, btn[0].query.limit));
+    dispatch(getMainCreator(first, second, stateInterval, stateLimit));
   }, []);
   useEffect(() => {
     sorting();

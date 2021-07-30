@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getMain = (interval, limit) =>
+export const getMain = (first, second, interval, limit) =>
   axios.get(
-    `https://api.binance.com/api/v1/klines?symbol=BTCUSDT&interval=${interval}&limit=${limit}`
+    `https://api.binance.com/api/v1/klines?symbol=${first}${second}&interval=${interval}&limit=${limit}`
   );

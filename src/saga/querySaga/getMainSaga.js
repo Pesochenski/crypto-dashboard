@@ -11,9 +11,12 @@ function* getMainWorker(action) {
   try {
     const res = yield call(
       getMain,
+      action.payload.first,
+      action.payload.second,
       action.payload.interval,
       action.payload.limit
     );
+    console.log(res.data);
 
     const payload = yield call(
       () =>

@@ -41,9 +41,14 @@ export function getMainReducer(state = initialMainState, action) {
   }
 }
 
-export const getMainCreator = (interval, limit) => ({
+export const getMainCreator = (firstState, secondState, interval, limit) => ({
   type: GET_MAIN,
-  payload: { limit: limit, interval: interval },
+  payload: {
+    first: firstState,
+    second: secondState,
+    limit: limit,
+    interval: interval,
+  },
 });
 export const getMainSuccessCreator = (payload) => ({
   type: GET_MAIN_SUCCESS,

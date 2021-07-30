@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./main-btns.scss";
 import { useDispatch } from "react-redux";
 import { getMainCreator } from "../../../store/reducers/queryReducers/getMainReducer";
+import { limitIntervalCreator } from "../../../store/reducers/stateReducers/LimitIntervalReducer";
 
 export default function MainChartBtns({ btn, activeBtn, setActiveBtn }) {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(
+      limitIntervalCreator(
+        String(activeBtn.activeLimit),
+        String(activeBtn.activeInterval)
+      )
+    );
+    // dispatch(getMainCreator(activeBtn.activeLimit, activeBtn.activeInterval));
+  }, [activeBtn.activeNum]);
 
   return (
     <div className="btns">
@@ -25,7 +36,7 @@ export default function MainChartBtns({ btn, activeBtn, setActiveBtn }) {
               activeInterval: item.query.interval,
               activeLimit: item.query.limit,
             });
-            dispatch(getMainCreator(item.query.interval, item.query.limit));
+            // dispatch(getMainCreator(item.query.interval, item.query.limit));
           }}
         >
           {item.btnName}

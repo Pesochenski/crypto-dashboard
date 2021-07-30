@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { firstCurrencyCreator } from "../../store/reducers/stateReducers/firstCurrencyReducer";
 import "./first-currency.scss";
 
 export function FirstCurrencyChange() {
+  const dispatch = useDispatch();
   const [firstValues, setFirstValues] = useState([
     "BTC",
     "LTC",
@@ -19,6 +22,7 @@ export function FirstCurrencyChange() {
 
   useEffect(() => {
     renderItems(0);
+    dispatch(firstCurrencyCreator(String(firstValues[0])));
   }, []);
   useEffect(() => {
     renderItems(activePag);
@@ -32,6 +36,10 @@ export function FirstCurrencyChange() {
       renderItems(firstValues.length - 4);
     }
   }, [firstValues]);
+
+  useEffect(() => {
+    dispatch(firstCurrencyCreator(activeCur.curName));
+  }, [activeCur]);
 
   function renderItems(num) {
     const newRender = [];
@@ -68,7 +76,11 @@ export function FirstCurrencyChange() {
   }
 
   function addItem(e) {
-    if (e.key === "Enter" && e.target.value.trim()) {
+    if (
+      e.key === "Enter" &&
+      e.target.value.trim() // &&
+      // e.target.value.toUpperCase() !== ("USD" || "USDT")
+    ) {
       setFirstValues([...firstValues, e.target.value.toUpperCase()]);
 
       if (renderArr.length < 4) {

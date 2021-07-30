@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { secondCurrencyCreator } from "../../store/reducers/stateReducers/secondCurrencyReducer";
 import CurrencyState from "../currencyState";
 import "./second.scss";
 
 export default function SecondValueChange() {
-  const [values, setValues] = useState(["USDT", "BTC", "ETH", "LTC"]);
+  const dispatch = useDispatch();
+  const [values, setValues] = useState(["USDT", "BNB", "BTC", "TRX"]);
   const [activeItem, setActiveItem] = useState(0);
 
   const [activeCur, setActiveCur] = useState({
@@ -17,10 +20,16 @@ export default function SecondValueChange() {
     }
   }
   useEffect(() => {
+    dispatch(secondCurrencyCreator(String(values[0])));
+  }, []);
+  useEffect(() => {
     if (activeCur.activeCurNum > values.length - 1) {
       setActiveCur({ activeCurName: values[0], activeCurNum: 1 });
     }
   }, [values]);
+  useEffect(() => {
+    dispatch(secondCurrencyCreator(activeCur.activeCurName));
+  }, [activeCur]);
 
   return (
     <div className="value-choice">
