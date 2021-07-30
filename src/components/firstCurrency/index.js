@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getForBtnCreator } from "../../store/reducers/queryReducers/getForBtnReducer";
 import { firstCurrencyCreator } from "../../store/reducers/stateReducers/firstCurrencyReducer";
 import "./first-currency.scss";
 
@@ -19,6 +20,7 @@ export function FirstCurrencyChange() {
     curName: firstValues[0],
     curNum: 0,
   });
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     renderItems(0);
@@ -40,6 +42,36 @@ export function FirstCurrencyChange() {
   useEffect(() => {
     dispatch(firstCurrencyCreator(activeCur.curName));
   }, [activeCur]);
+
+  useEffect(() => {
+    // if (data.length === 4) {
+    //   setData([]);
+    // }
+    // setData([...data, yArr]);
+    // console.log(data);
+  }, [data, yArr]);
+  useEffect(() => {
+    collectData();
+  }, [renderArr]);
+
+  const { xArr, yArr } = useSelector((state) => state.getForBtn);
+
+  function collectData() {
+    dispatch(getForBtnCreator(renderArr[0]));
+    let once = [];
+    const test = [];
+
+    for (let i = 0; i < renderArr.length; i++) {
+      while (yArr === once) {
+        once = yArr;
+      }
+      if (yArr !== once) {
+        test.push(yArr);
+        dispatch(getForBtnCreator(renderArr[i]));
+      }
+    }
+    console.log(test);
+  }
 
   function renderItems(num) {
     const newRender = [];

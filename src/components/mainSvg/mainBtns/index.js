@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "./main-btns.scss";
 import { useDispatch } from "react-redux";
-import { getMainCreator } from "../../../store/reducers/queryReducers/getMainReducer";
+// import { getMainCreator } from "../../../store/reducers/queryReducers/getMainReducer";
 import { limitIntervalCreator } from "../../../store/reducers/stateReducers/LimitIntervalReducer";
 
 export default function MainChartBtns({ btn, activeBtn, setActiveBtn }) {
