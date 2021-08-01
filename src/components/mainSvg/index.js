@@ -6,7 +6,7 @@ import { sortTimeCreator } from "../../store/reducers/sortReducers/sortTimeReduc
 import MainChartBtns from "./mainBtns";
 
 export default function SvgChart() {
-  const [stroke, setStroke] = useState(null);
+  const [stroke, setStroke] = useState("");
   const [firstX, setFirstX] = useState(0);
   const [firstY, setFirstY] = useState(0);
   const [minY, setMinY] = useState(0);
@@ -14,6 +14,7 @@ export default function SvgChart() {
   const [yLines, setYLines] = useState([]);
   const [xLines, setXLines] = useState([]);
   const [area, setArea] = useState("");
+  const [mayDraw, setMayDraw] = useState(false);
 
   const [btn, setBtn] = useState([
     {
@@ -87,7 +88,7 @@ export default function SvgChart() {
   // const X_LINE_COUNT = activeBtn.activeLineCount;
 
   const VIEW_HEIGHT = HEIGHT - Y_PADDING * 2;
-  const VIEW_WIDTH = WIDTH - X_PADDING * 2; // + X_PADDING / 2
+  const VIEW_WIDTH = WIDTH - X_PADDING * 2;
 
   const xRatio = Math.round(VIEW_WIDTH / (xArr.length - 2));
   const yRatio = VIEW_HEIGHT / (maxY - minY);
@@ -96,7 +97,10 @@ export default function SvgChart() {
   const TEXT_STEP = (maxY - minY) / Y_LINE_COUNT;
 
   useEffect(() => {
-    dispatch(getMainCreator(first, second, stateInterval, stateLimit));
+    if (stateInterval) {
+      dispatch(getMainCreator(first, second, stateInterval, stateLimit));
+    }
+    // dispatch(getMainCreator(first, second, stateInterval, stateLimit));
   }, [first, second, stateLimit, stateInterval]);
 
   useEffect(() => {
@@ -106,7 +110,9 @@ export default function SvgChart() {
     return () => clearInterval(svgInterval);
   }, [xArr]);
   useEffect(() => {
-    dispatch(getMainCreator(first, second, stateInterval, stateLimit));
+    if (stateInterval) {
+      dispatch(getMainCreator(first, second, stateInterval, stateLimit));
+    }
   }, []);
   useEffect(() => {
     sorting();
@@ -115,6 +121,15 @@ export default function SvgChart() {
     dispatch(sortTimeCreator(time, xArr, activeBtn.activeName));
     drawing();
   }, [maxY, minY, time]);
+  useEffect(() => {
+    const checking = stroke.split(" ");
+    const firstPop = checking.pop();
+    const secondPop = checking.pop();
+    setMayDraw(
+      secondPop ===
+        String(HEIGHT - (yArr[yArr.length - 1] - minY) * yRatio - Y_PADDING)
+    );
+  }, [stroke]);
 
   function sorting() {
     const yData = [];
@@ -217,12 +232,14 @@ export default function SvgChart() {
           <p className="main__load-text">Connection error</p>
         ) : (
           <svg className="main__svg">
-            <path
-              d={`M ${firstX + X_PADDING} ${
-                Math.round(firstY) - Y_PADDING
-              } ${area}`}
-              className="main__area"
-            />
+            {mayDraw ? (
+              <path
+                d={`M ${firstX + X_PADDING} ${
+                  Math.round(firstY) - Y_PADDING
+                } ${area}`}
+                className="main__area"
+              />
+            ) : null}
 
             {xLines &&
             (activeBtn.activeName == "1d" ||
@@ -298,7 +315,7 @@ export default function SvgChart() {
                 : null}
             </g>
 
-            {stroke ? (
+            {mayDraw ? (
               <path
                 d={`M ${firstX + X_PADDING} ${
                   Math.round(firstY) - Y_PADDING

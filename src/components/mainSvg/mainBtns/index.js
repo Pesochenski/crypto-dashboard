@@ -14,7 +14,6 @@ export default function MainChartBtns({ btn, activeBtn, setActiveBtn }) {
         String(activeBtn.activeInterval)
       )
     );
-    // dispatch(getMainCreator(activeBtn.activeLimit, activeBtn.activeInterval));
   }, [activeBtn.activeNum]);
 
   return (
@@ -31,12 +30,10 @@ export default function MainChartBtns({ btn, activeBtn, setActiveBtn }) {
             setActiveBtn({
               activeNum: i + 1,
               activeName: item.btnName,
-              // activeLineCount: item.lineCount,
               activeTextPadding: item.textPadding,
               activeInterval: item.query.interval,
               activeLimit: item.query.limit,
             });
-            // dispatch(getMainCreator(item.query.interval, item.query.limit));
           }}
         >
           {item.btnName}

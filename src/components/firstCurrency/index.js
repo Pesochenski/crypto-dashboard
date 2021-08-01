@@ -6,6 +6,10 @@ import "./first-currency.scss";
 
 export function FirstCurrencyChange() {
   const dispatch = useDispatch();
+  const { loaded, error, first, second, third, fourth } = useSelector(
+    (state) => state.getForBtn
+  );
+
   const [firstValues, setFirstValues] = useState([
     "BTC",
     "LTC",
@@ -20,7 +24,9 @@ export function FirstCurrencyChange() {
     curName: firstValues[0],
     curNum: 0,
   });
-  const [data, setData] = useState([]);
+  const [btnPath, setBtnPath] = useState([]);
+  const [firstYchart, setFirstYchart] = useState([]);
+  const rendered = ["first, second", "third", "fourth"];
 
   useEffect(() => {
     renderItems(0);
@@ -42,35 +48,25 @@ export function FirstCurrencyChange() {
   useEffect(() => {
     dispatch(firstCurrencyCreator(activeCur.curName));
   }, [activeCur]);
-
   useEffect(() => {
-    // if (data.length === 4) {
-    //   setData([]);
-    // }
-    // setData([...data, yArr]);
-    // console.log(data);
-  }, [data, yArr]);
-  useEffect(() => {
-    collectData();
-  }, [renderArr]);
+    btnDrawing();
+  }, [first.yArr]);
 
-  const { xArr, yArr } = useSelector((state) => state.getForBtn);
+  const HEIGHT = 90;
+  const WIDTH = 200;
+  const X_PADDING = 22;
+  const VIEW_WIDTH = WIDTH - X_PADDING * 2;
+  const xRatio = Math.round(VIEW_WIDTH / (first.xArr.length - 2));
 
-  function collectData() {
-    dispatch(getForBtnCreator(renderArr[0]));
-    let once = [];
-    const test = [];
-
-    for (let i = 0; i < renderArr.length; i++) {
-      while (yArr === once) {
-        once = yArr;
-      }
-      if (yArr !== once) {
-        test.push(yArr);
-        dispatch(getForBtnCreator(renderArr[i]));
-      }
+  function collectData(arr) {
+    if (arr.length >= 1) {
+      // if (arr.length === 1) {
+      //  dispatch(getForBtnCreator(arr[0]));
+      // } // else {
+      dispatch(getForBtnCreator(arr[0], arr[1], arr[2], arr[3]));
+      // }
+      // dispatch(getForBtnCreator(arr[0], arr[1], arr[2], arr[3]));
     }
-    console.log(test);
   }
 
   function renderItems(num) {
@@ -80,6 +76,7 @@ export function FirstCurrencyChange() {
         newRender.push(firstValues[i]);
       }
     }
+    collectData(newRender);
     setRenderArr(newRender);
     setActivePag(num);
   }
@@ -91,13 +88,81 @@ export function FirstCurrencyChange() {
   }
 
   function addItem(e) {
-    if (e.key === "Enter" && e.target.value.trim()) {
+    if (
+      e.key === "Enter" &&
+      e.target.value.trim() &&
+      !firstValues.includes(e.target.value.toUpperCase())
+    ) {
       setFirstValues([...firstValues, e.target.value.toUpperCase()]);
 
       if (renderArr.length < 4) {
         setRenderArr([...renderArr, e.target.value.toUpperCase()]);
       }
     }
+  }
+
+  function btnDrawing() {
+    const minYchart = [];
+    const maxYchart = [];
+
+    function sorting(data) {
+      const yData = [];
+
+      for (const y of data.yArr) {
+        yData.push(y);
+      }
+      for (let i = 0; i < yData.length; i++) {
+        let minIndex = i;
+        for (let j = i; j < yData.length; j++) {
+          if (yData[j] < yData[minIndex]) {
+            minIndex = j;
+          }
+        }
+        const stock = yData[i];
+        yData[i] = yData[minIndex];
+        yData[minIndex] = stock;
+      }
+
+      minYchart.push(yData[0]);
+      maxYchart.push(yData[yData.length - 1]);
+    }
+    sorting(first);
+    sorting(second);
+    sorting(third);
+    sorting(fourth);
+
+    const yRatio = [];
+    for (let i = 0; i < minYchart.length; i++) {
+      let num = 0;
+      num = HEIGHT / (maxYchart[i] - minYchart[i]);
+      yRatio.push(num);
+    }
+
+    const initialStroke = [];
+    const firstYarr = [];
+    function finalWriting(data, index) {
+      let final = "L ";
+      const newFirstY =
+        HEIGHT - Math.round((data.yArr[0] - minYchart[index]) * yRatio[index]);
+
+      for (let i = 0; i < data.xArr.length; i++) {
+        final +=
+          String(data.xArr[i] * xRatio + X_PADDING) +
+          " " +
+          String(HEIGHT - (data.yArr[i] - minYchart[index]) * yRatio[index]) +
+          " ";
+      }
+
+      initialStroke.push(final);
+      firstYarr.push(newFirstY);
+    }
+    finalWriting(first, 0);
+    finalWriting(second, 1);
+    finalWriting(third, 2);
+    finalWriting(fourth, 3);
+
+    setBtnPath(initialStroke);
+    setFirstYchart(firstYarr);
   }
 
   return (
@@ -151,6 +216,42 @@ export function FirstCurrencyChange() {
                 Delete
               </button>
             </div>
+            <div className="currency-choice__chart">
+              {!loaded ? (
+                <p
+                  className={
+                    hoverCur === i + 1 ||
+                    activeCur.curNum === firstValues.indexOf(item)
+                      ? "currency-choice__chart-text currency-choice__chart-text_active"
+                      : "currency-choice__chart-text"
+                  }
+                >
+                  Loading...
+                </p>
+              ) : error ? (
+                <p
+                  className={
+                    hoverCur === i + 1 ||
+                    activeCur.curNum === firstValues.indexOf(item)
+                      ? "currency-choice__chart-text currency-choice__chart-text_active"
+                      : "currency-choice__chart-text"
+                  }
+                >
+                  Error
+                </p>
+              ) : (
+                <svg className="currency-choice__svg">
+                  {btnPath ? (
+                    <path
+                      d={`M ${0 + X_PADDING} ${Math.round(firstYchart[i])} ${
+                        btnPath[i]
+                      }`}
+                      className="currency-choice__path"
+                    />
+                  ) : null}
+                </svg>
+              )}
+            </div>
           </div>
         ))}
       </div>
@@ -167,6 +268,7 @@ export function FirstCurrencyChange() {
           (i + 1) % 4 === 0 &&
           firstValues.length > firstValues.indexOf(item) + 1 ? (
             <button
+              key={i}
               className={
                 activePag === i + 1
                   ? "currency-choice__btn_active currency-choice__btn"

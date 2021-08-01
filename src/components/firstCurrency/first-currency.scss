@@ -29,10 +29,10 @@
 
     &-title {
       font: {
-        family: 'Montserrat';
+        family: "Montserrat";
         size: 14px;
-        weight: 400; 
-      };
+        weight: 400;
+      }
       letter-spacing: 0.02em;
       color: $main-dark;
       transition: 0.3s;
@@ -59,7 +59,7 @@
         family: "Montserrat";
         size: 12px;
         weight: 300;
-      };
+      }
       &_hover {
         color: $main-light;
       }
@@ -126,5 +126,37 @@
       width: 200px;
       border: 2px solid $first-back;
     }
+  }
+
+  &__chart {
+    width: 100%;
+    height: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+
+    &-text {
+      font: {
+        family: "Montserrat";
+        size: 14px;
+        weight: 300;
+      }
+      color: $main-dark;
+      &_active {
+        color: $main-light;
+      }
+    }
+  }
+
+  &__svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  &__path {
+    fill: none;
+    stroke: $chart;
+    stroke-width: 2;
   }
 }

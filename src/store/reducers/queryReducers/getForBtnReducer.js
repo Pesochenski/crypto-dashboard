@@ -1,8 +1,22 @@
 const forBtnInitialState = {
   loaded: false,
   error: false,
-  xArr: [],
-  yArr: [],
+  first: {
+    xArr: [],
+    yArr: [],
+  },
+  second: {
+    xArr: [],
+    yArr: [],
+  },
+  third: {
+    xArr: [],
+    yArr: [],
+  },
+  fourth: {
+    xArr: [],
+    yArr: [],
+  },
 };
 
 export const GET_FORBTN = "GET_FORBTN";
@@ -15,31 +29,83 @@ export function getForBtnReducer(state = forBtnInitialState, action) {
       return {
         loaded: false,
         error: false,
-        xArr: [],
-        yArr: [],
+        first: {
+          xArr: [],
+          yArr: [],
+        },
+        second: {
+          xArr: [],
+          yArr: [],
+        },
+        third: {
+          xArr: [],
+          yArr: [],
+        },
+        fourth: {
+          xArr: [],
+          yArr: [],
+        },
       };
     case GET_FORBTN_SUCCESS:
       return {
         loaded: true,
         error: false,
-        xArr: action.payload.xArr,
-        yArr: action.payload.yArr,
+        first: {
+          xArr: action.payload.first.xArr,
+          yArr: action.payload.first.yArr,
+        },
+        second: {
+          xArr: action.payload.second.xArr,
+          yArr: action.payload.second.yArr,
+        },
+        third: {
+          xArr: action.payload.third.xArr,
+          yArr: action.payload.third.yArr,
+        },
+        fourth: {
+          xArr: action.payload.fourth.xArr,
+          yArr: action.payload.fourth.yArr,
+        },
       };
     case GET_FORBTN_ERROR:
       return {
         loaded: true,
         error: true,
-        xArr: [],
-        yArr: [],
+        first: {
+          xArr: [],
+          yArr: [],
+        },
+        second: {
+          xArr: [],
+          yArr: [],
+        },
+        third: {
+          xArr: [],
+          yArr: [],
+        },
+        fourth: {
+          xArr: [],
+          yArr: [],
+        },
       };
     default:
       return state;
   }
 }
 
-export const getForBtnCreator = (firstState) => ({
+export const getForBtnCreator = (
+  firstState,
+  secondState,
+  thirdState,
+  fourthState
+) => ({
   type: GET_FORBTN,
-  payload: { first: firstState },
+  payload: {
+    first: firstState,
+    second: secondState,
+    third: thirdState,
+    fourth: fourthState,
+  },
 });
 export const getForBtnSuccessCreator = (payload) => ({
   type: GET_FORBTN_SUCCESS,
