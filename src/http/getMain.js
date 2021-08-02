@@ -2,9 +2,11 @@ import axios from "axios";
 
 export const getMain = (first, second, interval, limit) => {
   // try {
-  return axios.get(
-    `https://api.binance.com/api/v1/klines?symbol=${first}${second}&interval=${interval}&limit=${limit}`
-  );
+  return axios
+    .get(
+      `https://api.binance.com/api/v1/klines?symbol=${first}${second}&interval=${interval}&limit=${limit}`
+    )
+    .catch((err) => err);
   //   .then((response) => {
   //     if (response.status >= 400) {
   //       return response.data.error;

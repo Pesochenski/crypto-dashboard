@@ -25,6 +25,7 @@ export function queryForBtn(first, second, third, fourth) {
 
     const responses = [res0, res1, res2, res3];
     const payload = [];
+
     for (let i = 0; i < responses.length; i++) {
       if (
         String(responses[i]) !== "Error: Network Error" &&
@@ -35,16 +36,19 @@ export function queryForBtn(first, second, third, fourth) {
           xArr: responses[i]?.data?.map((item, index) => index),
           yArr: responses[i]?.data?.map((item) => Number(item[4])),
         });
-      } else if (responses[i] !== null) {
+      } else if (
+        responses[i] === null ||
+        String(responses[i]) === "Error: Network Error"
+      ) {
         payload.push({
           error: true,
           xArr: responses[i]?.data?.map((item, index) => index),
           yArr: responses[i]?.data?.map((item) => Number(item[4])),
         });
       }
+      // console.log(payload);
     }
 
-    // console.log(responses);
     // console.log(payload);
 
     dispatch(getForBtnSuccessCreator(payload));

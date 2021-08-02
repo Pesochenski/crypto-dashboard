@@ -123,20 +123,37 @@ export function FirstCurrencyChange() {
       maxYchart.push(yData[yData.length - 1]);
     }
 
-    sorting(first);
-    if (second.xArr !== undefined) {
+    if (!first.error) {
+      sorting(first);
+    } else {
+      minYchart.push(0);
+      maxYchart.push(0);
+    }
+    if (!second.error) {
       sorting(second);
+    } else {
+      minYchart.push(0);
+      maxYchart.push(0);
     }
-    if (third.xArr !== undefined) {
+    if (!third.error) {
       sorting(third);
+    } else {
+      minYchart.push(0);
+      maxYchart.push(0);
     }
-    if (fourth.xArr !== undefined) {
+    if (!fourth.error) {
       sorting(fourth);
+    } else {
+      minYchart.push(0);
+      maxYchart.push(0);
     }
 
     const yRatio = [];
     for (let i = 0; i < minYchart.length; i++) {
       let num = 0;
+      if (minYchart === 0) {
+        yRatio.push(0);
+      }
       num = HEIGHT / (maxYchart[i] - minYchart[i]);
       yRatio.push(num);
     }
@@ -169,21 +186,42 @@ export function FirstCurrencyChange() {
       allYArrSorted.push(yArrSorted);
     }
 
-    finalWriting(first, 0);
-    if (second.xArr !== undefined) {
+    if (!first.error) {
+      finalWriting(first, 0);
+    } else {
+      initialStroke.push("0");
+      firstYarr.push(0);
+    }
+    if (!second.error) {
       finalWriting(second, 1);
+    } else {
+      initialStroke.push("0");
+      firstYarr.push(0);
     }
-    if (third.xArr !== undefined) {
+    if (!third.error) {
       finalWriting(third, 2);
+    } else {
+      initialStroke.push("0");
+      firstYarr.push(0);
     }
-    if (fourth.xArr !== undefined) {
+    if (!fourth.error) {
       finalWriting(fourth, 3);
+    } else {
+      initialStroke.push("0");
+      firstYarr.push(0);
     }
+
+    // console.log(initialStroke, firstYarr);
 
     setBtnPath(initialStroke);
     setFirstYchart(firstYarr);
 
-    const copiedPath = initialStroke[initialStroke.length - 1]?.split(" ");
+    let copiedPath = [];
+    for (let i = 0; i < initialStroke.length; i++) {
+      if (initialStroke[i] !== "0") {
+        copiedPath = initialStroke[i]?.split(" ");
+      }
+    }
     const firstPop = copiedPath?.pop();
     const secondPop = copiedPath?.pop();
     if (secondPop === allYArrSorted[allYArrSorted.length - 1][47]) {
@@ -256,7 +294,7 @@ export function FirstCurrencyChange() {
                 >
                   Loading...
                 </p>
-              ) : rendered[i].error ? (
+              ) : btnPath[i] === "0" ? (
                 <p
                   className={
                     hoverCur === i + 1 ||
@@ -269,7 +307,7 @@ export function FirstCurrencyChange() {
                 </p>
               ) : (
                 <svg className="currency-choice__svg">
-                  {btnPath && draw ? (
+                  {btnPath[i] !== "0" && draw ? (
                     <path
                       d={`M ${0 + X_PADDING} ${Math.round(firstYchart[i])} ${
                         btnPath[i]

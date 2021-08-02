@@ -55,20 +55,23 @@ export function getForBtnReducer(state = forBtnInitialState, action) {
     case GET_FORBTN_SUCCESS:
       return {
         loaded: true,
-        error: false,
         first: {
+          error: action.payload[0].error,
           xArr: action.payload[0].xArr,
           yArr: action.payload[0].yArr,
         },
         second: {
+          error: action.payload[1].error,
           xArr: action.payload[1]?.xArr,
           yArr: action.payload[1]?.yArr,
         },
         third: {
+          error: action.payload[2].error,
           xArr: action.payload[2]?.xArr,
           yArr: action.payload[2]?.yArr,
         },
         fourth: {
+          error: action.payload[3].error,
           xArr: action.payload[3]?.xArr,
           yArr: action.payload[3]?.yArr,
         },
