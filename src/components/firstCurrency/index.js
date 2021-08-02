@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getForBtnCreator } from "../../store/reducers/queryReducers/getForBtnReducer";
 import { firstCurrencyCreator } from "../../store/reducers/stateReducers/firstCurrencyReducer";
+import { queryForBtn } from "../../thunk/query/queryForBtn";
 import "./first-currency.scss";
 
 export function FirstCurrencyChange() {
   const dispatch = useDispatch();
-  const { loaded, error, first, second, third, fourth } = useSelector(
+  const { loaded, first, second, third, fourth } = useSelector(
     (state) => state.getForBtn
   );
 
@@ -26,7 +26,7 @@ export function FirstCurrencyChange() {
   });
   const [btnPath, setBtnPath] = useState([]);
   const [firstYchart, setFirstYchart] = useState([]);
-  const rendered = ["first, second", "third", "fourth"];
+  const [rendered, setRendered] = ["first, second", "third", "fourth"];
 
   useEffect(() => {
     renderItems(0);
@@ -56,16 +56,11 @@ export function FirstCurrencyChange() {
   const WIDTH = 200;
   const X_PADDING = 22;
   const VIEW_WIDTH = WIDTH - X_PADDING * 2;
-  const xRatio = Math.round(VIEW_WIDTH / (first.xArr.length - 2));
+  const xRatio = Math.round(VIEW_WIDTH / (first.xArr?.length - 2));
 
   function collectData(arr) {
     if (arr.length >= 1) {
-      // if (arr.length === 1) {
-      //  dispatch(getForBtnCreator(arr[0]));
-      // } // else {
-      dispatch(getForBtnCreator(arr[0], arr[1], arr[2], arr[3]));
-      // }
-      // dispatch(getForBtnCreator(arr[0], arr[1], arr[2], arr[3]));
+      dispatch(queryForBtn(arr[0], arr[1], arr[2], arr[3]));
     }
   }
 
@@ -126,10 +121,17 @@ export function FirstCurrencyChange() {
       minYchart.push(yData[0]);
       maxYchart.push(yData[yData.length - 1]);
     }
+
     sorting(first);
-    sorting(second);
-    sorting(third);
-    sorting(fourth);
+    if (second.xArr !== undefined) {
+      sorting(second);
+    }
+    if (third.xArr !== undefined) {
+      sorting(third);
+    }
+    if (fourth.xArr !== undefined) {
+      sorting(fourth);
+    }
 
     const yRatio = [];
     for (let i = 0; i < minYchart.length; i++) {
@@ -145,7 +147,7 @@ export function FirstCurrencyChange() {
       const newFirstY =
         HEIGHT - Math.round((data.yArr[0] - minYchart[index]) * yRatio[index]);
 
-      for (let i = 0; i < data.xArr.length; i++) {
+      for (let i = 0; i < data.xArr?.length; i++) {
         final +=
           String(data.xArr[i] * xRatio + X_PADDING) +
           " " +
@@ -156,10 +158,19 @@ export function FirstCurrencyChange() {
       initialStroke.push(final);
       firstYarr.push(newFirstY);
     }
+    // console.log(first, second, third, fourth);
+    // console.log(loaded);
+
     finalWriting(first, 0);
-    finalWriting(second, 1);
-    finalWriting(third, 2);
-    finalWriting(fourth, 3);
+    if (second.xArr !== undefined) {
+      finalWriting(second, 1);
+    }
+    if (third.xArr !== undefined) {
+      finalWriting(third, 2);
+    }
+    if (fourth.xArr !== undefined) {
+      finalWriting(fourth, 3);
+    }
 
     setBtnPath(initialStroke);
     setFirstYchart(firstYarr);
@@ -228,7 +239,7 @@ export function FirstCurrencyChange() {
                 >
                   Loading...
                 </p>
-              ) : error ? (
+              ) : rendered[i].error ? (
                 <p
                   className={
                     hoverCur === i + 1 ||

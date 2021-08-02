@@ -1,19 +1,22 @@
 const forBtnInitialState = {
   loaded: false,
-  error: false,
   first: {
+    error: false,
     xArr: [],
     yArr: [],
   },
   second: {
+    error: false,
     xArr: [],
     yArr: [],
   },
   third: {
+    error: false,
     xArr: [],
     yArr: [],
   },
   fourth: {
+    error: false,
     xArr: [],
     yArr: [],
   },
@@ -28,20 +31,23 @@ export function getForBtnReducer(state = forBtnInitialState, action) {
     case GET_FORBTN:
       return {
         loaded: false,
-        error: false,
         first: {
+          error: false,
           xArr: [],
           yArr: [],
         },
         second: {
+          error: false,
           xArr: [],
           yArr: [],
         },
         third: {
+          error: false,
           xArr: [],
           yArr: [],
         },
         fourth: {
+          error: false,
           xArr: [],
           yArr: [],
         },
@@ -51,41 +57,20 @@ export function getForBtnReducer(state = forBtnInitialState, action) {
         loaded: true,
         error: false,
         first: {
-          xArr: action.payload.first.xArr,
-          yArr: action.payload.first.yArr,
+          xArr: action.payload[0].xArr,
+          yArr: action.payload[0].yArr,
         },
         second: {
-          xArr: action.payload.second.xArr,
-          yArr: action.payload.second.yArr,
+          xArr: action.payload[1]?.xArr,
+          yArr: action.payload[1]?.yArr,
         },
         third: {
-          xArr: action.payload.third.xArr,
-          yArr: action.payload.third.yArr,
+          xArr: action.payload[2]?.xArr,
+          yArr: action.payload[2]?.yArr,
         },
         fourth: {
-          xArr: action.payload.fourth.xArr,
-          yArr: action.payload.fourth.yArr,
-        },
-      };
-    case GET_FORBTN_ERROR:
-      return {
-        loaded: true,
-        error: true,
-        first: {
-          xArr: [],
-          yArr: [],
-        },
-        second: {
-          xArr: [],
-          yArr: [],
-        },
-        third: {
-          xArr: [],
-          yArr: [],
-        },
-        fourth: {
-          xArr: [],
-          yArr: [],
+          xArr: action.payload[3]?.xArr,
+          yArr: action.payload[3]?.yArr,
         },
       };
     default:
@@ -93,22 +78,8 @@ export function getForBtnReducer(state = forBtnInitialState, action) {
   }
 }
 
-export const getForBtnCreator = (
-  firstState,
-  secondState,
-  thirdState,
-  fourthState
-) => ({
-  type: GET_FORBTN,
-  payload: {
-    first: firstState,
-    second: secondState,
-    third: thirdState,
-    fourth: fourthState,
-  },
-});
+export const getForBtnCreator = () => ({ type: GET_FORBTN });
 export const getForBtnSuccessCreator = (payload) => ({
   type: GET_FORBTN_SUCCESS,
   payload: payload,
 });
-export const getForBtnErrorCreator = () => ({ type: GET_FORBTN_ERROR });
