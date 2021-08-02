@@ -72,7 +72,7 @@
     margin-left: 12px;
     width: 100px;
     height: 34px;
-    border-radius: 8px;
+    border-radius: 10px;
     background: none;
     background-color: $second-back;
     transition: 0.3s;
@@ -114,7 +114,7 @@
       width: 34px;
       height: 34px;
       background: none;
-      border-left: 2px solid $main-light;
+      // border-left: 2px solid $main-light;
     }
   }
 }

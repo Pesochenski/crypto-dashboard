@@ -82,9 +82,9 @@ export default function SecondValueChange() {
               <svg className="value-choice__svg" viewBox="0 0 34 34">
                 <line
                   x1="4"
-                  y1="22"
+                  y1="21"
                   x2="14"
-                  y2="12"
+                  y2="11"
                   className={
                     activeItem == i + 1
                       ? "value-choice__cross_hover"
@@ -95,9 +95,9 @@ export default function SecondValueChange() {
                 />
                 <line
                   x1="14"
-                  y1="22"
+                  y1="21"
                   x2="4"
-                  y2="12"
+                  y2="11"
                   className={
                     activeItem == i + 1
                       ? "value-choice__cross_hover"

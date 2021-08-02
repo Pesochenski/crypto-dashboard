@@ -15,7 +15,7 @@ export function FirstCurrencyChange() {
     "LTC",
     "ETH",
     "BNB",
-    "ADA",
+    "WIN",
   ]);
   const [renderArr, setRenderArr] = useState([]);
   const [activePag, setActivePag] = useState(0);
@@ -27,6 +27,7 @@ export function FirstCurrencyChange() {
   const [btnPath, setBtnPath] = useState([]);
   const [firstYchart, setFirstYchart] = useState([]);
   const [rendered, setRendered] = ["first, second", "third", "fourth"];
+  const [draw, setDraw] = useState(false);
 
   useEffect(() => {
     renderItems(0);
@@ -142,8 +143,12 @@ export function FirstCurrencyChange() {
 
     const initialStroke = [];
     const firstYarr = [];
+    const allYArrSorted = [];
+
     function finalWriting(data, index) {
       let final = "L ";
+      const yArrSorted = [];
+
       const newFirstY =
         HEIGHT - Math.round((data.yArr[0] - minYchart[index]) * yRatio[index]);
 
@@ -153,13 +158,16 @@ export function FirstCurrencyChange() {
           " " +
           String(HEIGHT - (data.yArr[i] - minYchart[index]) * yRatio[index]) +
           " ";
+
+        yArrSorted.push(
+          String(HEIGHT - (data.yArr[i] - minYchart[index]) * yRatio[index])
+        );
       }
 
       initialStroke.push(final);
       firstYarr.push(newFirstY);
+      allYArrSorted.push(yArrSorted);
     }
-    // console.log(first, second, third, fourth);
-    // console.log(loaded);
 
     finalWriting(first, 0);
     if (second.xArr !== undefined) {
@@ -174,6 +182,15 @@ export function FirstCurrencyChange() {
 
     setBtnPath(initialStroke);
     setFirstYchart(firstYarr);
+
+    const copiedPath = initialStroke[initialStroke.length - 1]?.split(" ");
+    const firstPop = copiedPath?.pop();
+    const secondPop = copiedPath?.pop();
+    if (secondPop === allYArrSorted[allYArrSorted.length - 1][47]) {
+      setDraw(true);
+    } else {
+      setDraw(false);
+    }
   }
 
   return (
@@ -252,7 +269,7 @@ export function FirstCurrencyChange() {
                 </p>
               ) : (
                 <svg className="currency-choice__svg">
-                  {btnPath ? (
+                  {btnPath && draw ? (
                     <path
                       d={`M ${0 + X_PADDING} ${Math.round(firstYchart[i])} ${
                         btnPath[i]
