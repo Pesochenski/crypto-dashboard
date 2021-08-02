@@ -22,10 +22,7 @@ export function sortTimeReducer(state = initialSortedTimeState, action) {
   }
 }
 
-export const sortTimeCreator = (arrayTime, arrayX, type) => ({
-  type: SORT_TIME,
-  payload: { array: arrayTime, arrayX: arrayX, type: type },
-});
+export const sortTimeCreator = () => ({ type: SORT_TIME });
 export const sortTimeSuccessCreator = (payload) => ({
   type: SORT_TIME_SUCCESS,
   payload: payload,

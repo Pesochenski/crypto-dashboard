@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./main-svg.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { getMainCreator } from "../../store/reducers/queryReducers/getMainReducer";
-import { sortTimeCreator } from "../../store/reducers/sortReducers/sortTimeReducer";
+// import { getMainCreator } from "../../store/reducers/queryReducers/getMainReducer";
+// import { sortTimeCreator } from "../../store/reducers/sortReducers/sortTimeReducer";
 import MainChartBtns from "./mainBtns";
+import { queryMain } from "../../thunk/query/queryMain";
+import { sortMain } from "../../thunk/sort/sortMain";
 
 export default function SvgChart() {
   const [stroke, setStroke] = useState("");
@@ -98,27 +100,27 @@ export default function SvgChart() {
 
   useEffect(() => {
     if (stateInterval) {
-      dispatch(getMainCreator(first, second, stateInterval, stateLimit));
+      dispatch(queryMain(first, second, stateInterval, stateLimit));
     }
     // dispatch(getMainCreator(first, second, stateInterval, stateLimit));
   }, [first, second, stateLimit, stateInterval]);
 
   useEffect(() => {
     const svgInterval = setInterval(() => {
-      dispatch(getMainCreator(first, second, stateInterval, stateLimit));
+      dispatch(queryMain(first, second, stateInterval, stateLimit));
     }, 60 * 1000);
     return () => clearInterval(svgInterval);
   }, [xArr]);
   useEffect(() => {
     if (stateInterval) {
-      dispatch(getMainCreator(first, second, stateInterval, stateLimit));
+      dispatch(queryMain(first, second, stateInterval, stateLimit));
     }
   }, []);
   useEffect(() => {
     sorting();
   }, [yArr, xArr]);
   useEffect(() => {
-    dispatch(sortTimeCreator(time, xArr, activeBtn.activeName));
+    dispatch(sortMain(time, xArr, activeBtn.activeName));
     drawing();
   }, [maxY, minY, time]);
   useEffect(() => {
