@@ -24,15 +24,6 @@ export default function Header() {
             <img src={Foreign} className="header__powered-logo" />
           </a>
         </p>
-
-        {/* <a
-          className="header__powered-link"
-          href="https://reactjs.org"
-          rel="noreferrer"
-          target="_blank"
-        >
-          <img className="header__powered-logo" src={ReactLogo} />
-       </a> */}
       </div>
     </header>
   );

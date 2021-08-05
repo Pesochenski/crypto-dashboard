@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap");
-@import '../../../styles/colors';
+@import "../../../styles/colors";
 
 .btns {
   margin-left: auto;
@@ -27,16 +27,14 @@
     &:first-child {
       margin-left: 0;
     }
-    &:hover {
+
+    &_hover {
       background-color: $first-back;
       color: $main-light;
     }
-  }
-
-  &__active-btn {
-    @extend .btns__btn;
-
-    background-color: $main-dark;
-    color: $main-light;
+    &_active {
+      background-color: $main-dark;
+      color: $main-light;
+    }
   }
 }

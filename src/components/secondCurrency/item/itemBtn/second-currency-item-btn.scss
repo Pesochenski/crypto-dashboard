@@ -1,0 +1,27 @@
+@import "../../../../styles/colors";
+
+.second-cur-btn {
+  &__svg {
+    width: 34px;
+    height: 34px;
+  }
+
+  &__cross {
+    stroke: $main-dark;
+    stroke-width: 1.2;
+    &_hover {
+      stroke: $main-light;
+      stroke-width: 1.2;
+    }
+    &_active {
+      stroke: $main-light;
+      stroke-width: 1.2;
+    }
+  }
+
+  &__del {
+    width: 34px;
+    height: 34px;
+    background: none;
+  }
+}

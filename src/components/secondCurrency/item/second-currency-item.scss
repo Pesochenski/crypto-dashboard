@@ -1,0 +1,46 @@
+@import "../../../styles/colors";
+
+.second-cur-item {
+  cursor: pointer;
+  margin-left: 12px;
+  width: 100px;
+  height: 34px;
+  border-radius: 10px;
+  background: none;
+  background-color: $second-back;
+  transition: 0.3s;
+  display: flex;
+  &_hover {
+    background-color: $first-back;
+  }
+
+  &__text {
+    font: {
+      family: "Montserrat";
+      size: 14px;
+      weight: 400;
+    }
+    letter-spacing: 0.05em;
+    color: $main-dark;
+    &_hover {
+      color: $main-light;
+    }
+    &_active {
+      color: $main-light;
+    }
+  }
+  &:first-child {
+    margin-left: 0;
+  }
+  &_active {
+    background-color: $main-dark;
+  }
+
+  &__name {
+    display: flex;
+    width: 66px;
+    height: 34px;
+    justify-content: center;
+    align-items: center;
+  }
+}

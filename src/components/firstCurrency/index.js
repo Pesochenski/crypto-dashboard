@@ -4,6 +4,8 @@ import { firstCurrencyCreator } from "../../store/reducers/stateReducers/firstCu
 import { queryForBtn } from "../../thunk/query/queryForBtn";
 import "./first-currency.scss";
 
+import FirstCurItem from "./item";
+
 export function FirstCurrencyChange() {
   const dispatch = useDispatch();
   const { loaded, first, second, third, fourth } = useSelector(
@@ -26,8 +28,8 @@ export function FirstCurrencyChange() {
   });
   const [btnPath, setBtnPath] = useState([]);
   const [firstYchart, setFirstYchart] = useState([]);
-  const [rendered, setRendered] = ["first, second", "third", "fourth"];
   const [draw, setDraw] = useState(false);
+  const [inputVal, setInputVal] = useState("");
 
   useEffect(() => {
     renderItems(0);
@@ -86,20 +88,22 @@ export function FirstCurrencyChange() {
   function addItem(e) {
     if (
       e.key === "Enter" &&
-      e.target.value.trim() &&
-      !firstValues.includes(e.target.value.toUpperCase())
+      inputVal.trim() &&
+      !firstValues.includes(inputVal.toUpperCase())
     ) {
-      setFirstValues([...firstValues, e.target.value.toUpperCase()]);
+      setFirstValues([...firstValues, inputVal.toUpperCase()]);
 
       if (renderArr.length < 4) {
-        setRenderArr([...renderArr, e.target.value.toUpperCase()]);
+        setRenderArr([...renderArr, inputVal.toUpperCase()]);
       }
+      setInputVal("");
     }
   }
 
   function btnDrawing() {
     const minYchart = [];
     const maxYchart = [];
+    const persents = [];
 
     function sorting(data) {
       const yData = [];
@@ -122,31 +126,48 @@ export function FirstCurrencyChange() {
       minYchart.push(yData[0]);
       maxYchart.push(yData[yData.length - 1]);
     }
+    function calculatePersents(data) {
+      const persent =
+        (Math.abs(data.yArr[data.yArr.length - 1] - data.yArr[0]) /
+          data.yArr[data.yArr.length - 1]) *
+        100;
+      persents.push(persent.toFixed(2));
+    }
 
     if (!first.error) {
       sorting(first);
+      calculatePersents(first);
     } else {
       minYchart.push(0);
       maxYchart.push(0);
+      // persents.push(0);
     }
     if (!second.error) {
       sorting(second);
+      calculatePersents(second);
     } else {
       minYchart.push(0);
       maxYchart.push(0);
+      // persents.push(0);
     }
     if (!third.error) {
       sorting(third);
+      calculatePersents(third);
     } else {
       minYchart.push(0);
       maxYchart.push(0);
+      // persents.push(0);
     }
     if (!fourth.error) {
       sorting(fourth);
+      calculatePersents(fourth);
     } else {
       minYchart.push(0);
       maxYchart.push(0);
+      // persents.push(0);
     }
+
+    // console.log(persents);
 
     const yRatio = [];
     for (let i = 0; i < minYchart.length; i++) {
@@ -234,91 +255,32 @@ export function FirstCurrencyChange() {
   return (
     <section className="currency-choice">
       <input
+        value={inputVal}
         type="text"
         placeholder="Add"
         maxLength="5"
         className="currency-choice__input"
         onKeyPress={(e) => addItem(e)}
+        onChange={(e) => setInputVal(e.target.value)}
       />
       <div className="currency-choice__values">
         {renderArr.map((item, i) => (
-          <div
+          <FirstCurItem
             key={i}
-            className={
-              hoverCur === i + 1
-                ? "currency-choice__item currency-choice__item_hover"
-                : activeCur.curNum === firstValues.indexOf(item)
-                ? "currency-choice__item_active currency-choice__item"
-                : "currency-choice__item"
-            }
-            onMouseEnter={() => setHoverCur(i + 1)}
-            onMouseLeave={() => setHoverCur(0)}
-            onClick={() =>
-              setActiveCur({ curName: item, curNum: firstValues.indexOf(item) })
-            }
-          >
-            <div className="currency-choice__item-header">
-              <p
-                className={
-                  hoverCur === i + 1
-                    ? "currency-choice__item-title currency-choice__item-title_hover"
-                    : activeCur.curNum === firstValues.indexOf(item)
-                    ? "currency-choice__item-title_active currency-choice__item-title"
-                    : "currency-choice__item-title"
-                }
-              >
-                {item}
-              </p>
-              <button
-                className={
-                  hoverCur === i + 1
-                    ? "currency-choice__item-del currency-choice__item-del_hover"
-                    : activeCur.curNum === firstValues.indexOf(item)
-                    ? "currency-choice__item-del_active currency-choice__item-del"
-                    : "currency-choice__item-del"
-                }
-                onClick={() => deleteAnyItem(item)}
-              >
-                Delete
-              </button>
-            </div>
-            <div className="currency-choice__chart">
-              {!loaded ? (
-                <p
-                  className={
-                    hoverCur === i + 1 ||
-                    activeCur.curNum === firstValues.indexOf(item)
-                      ? "currency-choice__chart-text currency-choice__chart-text_active"
-                      : "currency-choice__chart-text"
-                  }
-                >
-                  Loading...
-                </p>
-              ) : btnPath[i] === "0" ? (
-                <p
-                  className={
-                    hoverCur === i + 1 ||
-                    activeCur.curNum === firstValues.indexOf(item)
-                      ? "currency-choice__chart-text currency-choice__chart-text_active"
-                      : "currency-choice__chart-text"
-                  }
-                >
-                  Error
-                </p>
-              ) : (
-                <svg className="currency-choice__svg">
-                  {btnPath[i] !== "0" && draw ? (
-                    <path
-                      d={`M ${0 + X_PADDING} ${Math.round(firstYchart[i])} ${
-                        btnPath[i]
-                      }`}
-                      className="currency-choice__path"
-                    />
-                  ) : null}
-                </svg>
-              )}
-            </div>
-          </div>
+            i={i}
+            item={item}
+            firstYchart={firstYchart}
+            X_PADDING={X_PADDING}
+            draw={draw}
+            btnPath={btnPath}
+            loaded={loaded}
+            firstValues={firstValues}
+            hoverCur={hoverCur}
+            activeCur={activeCur}
+            setActiveCur={setActiveCur}
+            setHoverCur={setHoverCur}
+            deleteAnyItem={deleteAnyItem}
+          />
         ))}
       </div>
       <div className="currency-choice__btns">

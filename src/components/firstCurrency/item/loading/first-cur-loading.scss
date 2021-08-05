@@ -1,0 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap");
+@import "../../../../styles/colors";
+
+.first-cur__loading {
+  font: {
+    family: "Montserrat";
+    size: 14px;
+    weight: 300;
+  }
+  color: $main-dark;
+  &_active {
+    color: $main-light;
+  }
+}

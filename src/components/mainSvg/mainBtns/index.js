@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./main-btns.scss";
 import { useDispatch } from "react-redux";
 // import { getMainCreator } from "../../../store/reducers/queryReducers/getMainReducer";
@@ -6,6 +6,7 @@ import { limitIntervalCreator } from "../../../store/reducers/stateReducers/Limi
 
 export default function MainChartBtns({ btn, activeBtn, setActiveBtn }) {
   const dispatch = useDispatch();
+  const [hoverBtn, setHoverBtn] = useState(0);
 
   useEffect(() => {
     dispatch(
@@ -21,8 +22,10 @@ export default function MainChartBtns({ btn, activeBtn, setActiveBtn }) {
       {btn.map((item, i) => (
         <button
           className={
-            activeBtn.activeNum == i + 1
-              ? "btns__btn btns__active-btn"
+            hoverBtn === i + 1 && activeBtn.activeNum !== i + 1
+              ? "btns__btn btns__btn_hover"
+              : activeBtn.activeNum === i + 1
+              ? "btns__btn btns__btn_active"
               : "btns__btn"
           }
           key={i}
@@ -35,6 +38,8 @@ export default function MainChartBtns({ btn, activeBtn, setActiveBtn }) {
               activeLimit: item.query.limit,
             });
           }}
+          onMouseEnter={() => setHoverBtn(i + 1)}
+          onMouseLeave={() => setHoverBtn(0)}
         >
           {item.btnName}
         </button>

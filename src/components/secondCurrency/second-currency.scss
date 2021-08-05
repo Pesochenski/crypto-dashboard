@@ -1,44 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap");
 @import "../../styles/colors";
 
-.currency-choice {
+.value-choice {
   display: flex;
   flex-direction: column;
-  margin-right: 20px;
-  &__values {
-    display: flex;
-    width: 415px;
-    height: 415px;
-    justify-content: space-between;
-    flex-wrap: wrap;
-  }
 
-  &__btns {
-    margin: 30px auto 0 auto;
+  &__header {
+    width: 100%;
     display: flex;
-  }
-  &__btn {
-    margin-left: 8px;
-    border-radius: 6px;
-    width: 20px;
-    height: 20px;
-    // border: 2px solid $first-back;
-    background-color: $second-back;
-    transition: 0.2s;
-    &:first-child {
-      margin-left: 0;
-    }
-    &:hover {
-      background-color: $first-back;
-    }
-
-    &_active {
-      background-color: $main-dark;
-      // border: 2px solid $main-dark;
-    }
   }
 
   &__input {
+    margin-left: auto;
+    margin-bottom: 12px;
     padding-left: 10px;
     border: none;
     outline: none;
@@ -69,5 +43,11 @@
       width: 200px;
       border: 2px solid $first-back;
     }
+  }
+
+  &__btns {
+    margin-left: auto;
+    display: flex;
+    margin-bottom: 20px;
   }
 }

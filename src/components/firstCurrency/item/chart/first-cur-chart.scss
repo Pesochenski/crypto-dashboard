@@ -1,0 +1,14 @@
+@import "../../../../styles/colors";
+
+.first-cur {
+  &__svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  &__path {
+    fill: none;
+    stroke: $chart;
+    stroke-width: 2;
+  }
+}
